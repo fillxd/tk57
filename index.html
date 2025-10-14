@@ -1,0 +1,2867 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dziennik Klasy</title>
+    <link rel="icon" type="image/jpg" href="favicon.jpg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 5px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background-color: white;
+            color: #2c3e50;
+        }
+
+        .tab:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-success {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #219a52;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+
+        /* Calendar Styles */
+        .calendar-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .week-range {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar th {
+            background-color: #34495e;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .calendar td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            vertical-align: top;
+            height: 80px;
+        }
+
+        .time-header {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: 500;
+            width: 60px;
+        }
+
+        /* Lesson type colors */
+        .lesson-normal { background-color: #e3f2fd; }
+        .lesson-substitution { background-color: #fff3e0; }
+        .lesson-exam { background-color: #ffebee; }
+        .lesson-quiz { background-color: #fce4ec; }
+        .lesson-completed { background-color: #e8f5e8; }
+        .lesson-absence { background-color: #f5f5f5; }
+        .lesson-cancelled { background-color: #f8d7da; }
+        .lesson-substitute-for { background-color: #d1ecf1; }
+
+        .lesson-item {
+            padding: 4px 6px;
+            border-radius: 3px;
+            margin-bottom: 2px;
+            font-size: 12px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .lesson-item:hover {
+            opacity: 0.8;
+        }
+
+        .lesson-class {
+            font-weight: bold;
+        }
+
+        .lesson-topic {
+            font-style: italic;
+            margin-top: 2px;
+            font-size: 11px;
+        }
+
+        .lesson-status {
+            font-size: 10px;
+            margin-top: 2px;
+            font-weight: bold;
+        }
+
+        .event-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Grade Table Styles */
+        .grade-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            align-items: center;
+        }
+
+        .grade-table-container {
+            overflow-x: auto;
+        }
+
+        .grade-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .grade-table th {
+            background-color: #34495e;
+            color: white;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: 500;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .grade-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .student-name {
+            text-align: left;
+            font-weight: 500;
+            position: sticky;
+            left: 0;
+            background-color: white;
+            z-index: 5;
+        }
+
+        .semester-header {
+            background-color: #2c3e50 !important;
+        }
+
+        .grade-cell {
+            cursor: pointer;
+            transition: background-color 0.2s;
+            min-width: 40px;
+        }
+
+        .grade-cell:hover {
+            background-color: #f8f9fa;
+        }
+
+        .average-cell {
+            font-weight: bold;
+            background-color: #f8f9fa;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #777;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .date-range {
+            display: flex;
+            gap: 10px;
+        }
+
+        .date-range input {
+            flex: 1;
+        }
+
+        /* Material Plan Styles */
+        .material-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            align-items: center;
+        }
+
+        .material-list {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .material-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .material-item:last-child {
+            border-bottom: none;
+        }
+
+        .material-item.completed {
+            background-color: #e8f5e8;
+        }
+
+        .material-info {
+            flex: 1;
+        }
+
+        .material-topic {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .material-date {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .material-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Event List Styles */
+        .event-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .event-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-left: 4px solid #3498db;
+        }
+
+        .event-card.exam {
+            border-left-color: #e74c3c;
+        }
+
+        .event-card.quiz {
+            border-left-color: #9b59b6;
+        }
+
+        .event-card.homework {
+            border-left-color: #f39c12;
+        }
+
+        .event-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .event-date {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .event-description {
+            color: #555;
+        }
+
+        /* Admin Panel Styles */
+        .admin-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .admin-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .admin-card h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .class-list, .student-list, .category-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .class-item, .student-item, .category-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .class-item:last-child, .student-item:last-child, .category-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .small-btn {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        /* Grade entry styles */
+        .grade-entry-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .student-grades-entry {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        .student-grade-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .student-grade-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Color picker */
+        .color-picker {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Schedule table */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .schedule-table th {
+            background-color: #34495e;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            vertical-align: top;
+            height: 80px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .schedule-table td:hover {
+            background-color: #f8f9fa;
+        }
+
+        .schedule-lesson {
+            padding: 4px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            background-color: #e3f2fd;
+        }
+
+        .schedule-lesson:hover {
+            opacity: 0.8;
+        }
+
+        /* Material topics input */
+        .material-topics-input {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        /* Grade details */
+        .grade-details {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .grade-details p {
+            margin-bottom: 8px;
+        }
+
+        /* Lesson details */
+        .lesson-details-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .topic-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .topic-item {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+
+        .topic-item.completed {
+            background-color: #e8f5e8;
+        }
+
+        .topic-checkbox {
+            width: 16px;
+            height: 16px;
+        }
+
+        .substitution-details {
+            background-color: #fff3e0;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            border-left: 4px solid #f39c12;
+        }
+
+        .grade-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            color: green;
+            font-weight: bold;
+        }
+
+        .quiz-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 12px;
+            color: purple;
+            font-weight: bold;
+        }
+
+        /* Event item styles */
+        .event-item {
+            background-color: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            position: relative;
+        }
+
+        .event-item:hover {
+            opacity: 0.8;
+        }
+
+        .event-item-title {
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .event-item-class {
+            font-size: 10px;
+            color: #7f8c8d;
+        }
+
+        .add-event-btn-container {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        
+        .menu {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: #222;
+            padding: 10px 15px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+        .menu a {
+            color: white;
+            text-decoration: none;
+            margin-bottom: 8px;
+            font-family: Arial, sans-serif;
+        }
+        .menu a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Nowe style dla dziennika klasy */
+        .class-info {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .subject-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        
+        .subject-selector label {
+            margin-bottom: 0;
+            font-weight: bold;
+        }
+        
+        .student-grades-view {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="menu">
+    <a href="https://fillxd.github.io/sz57">Syst</a>
+    <a href="https://fillxd.github.io/pl57">Plan</a>
+    <a href="https://fillxd.github.io/kl57">5b</a>
+    <a href="https://fillxd.github.io/na57">MG</a>
+</div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>📚 Dziennik Klasy</h1>
+            </div>
+            <div class="nav-tabs">
+                <div class="tab active" data-tab="home">Strona Główna</div>
+                <div class="tab" data-tab="schedule">Plan Lekcji</div>
+                <div class="tab" data-tab="material">Rozkład Materiału</div>
+                <div class="tab" data-tab="grades">Oceny</div>
+                <div class="tab" data-tab="admin">Administracja</div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Home Section -->
+            <section id="home" class="section active">
+                <div class="section-header">
+                    <h2 class="section-title">Strona Główna - Terminarz Tygodniowy</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" id="prev-week">← Poprzedni</button>
+                        <button class="btn btn-primary" id="next-week">Następny →</button>
+                    </div>
+                </div>
+                
+                <div class="class-info">
+                    <h3>Klasa: <span id="current-class-name">5B</span></h3>
+                    <p>Wychowawca: <span id="class-teacher">Mateusz Gig</span></p>
+                </div>
+                
+                <div class="add-event-btn-container">
+                    <button class="btn btn-success" id="add-event-btn">DODAJ WYDARZENIE</button>
+                </div>
+                
+                <div class="calendar-navigation">
+                    <div class="week-range" id="week-range">Ładowanie...</div>
+                </div>
+                
+                <div class="upcoming-events">
+                    <h3>Nadchodzące wydarzenia</h3>
+                    <div id="upcoming-events-list" class="event-list">
+                        <!-- Events will be loaded here -->
+                    </div>
+                </div>
+                
+                <div class="calendar-container">
+                    <table class="calendar" id="weekly-calendar">
+                        <thead>
+                            <tr>
+                                <th>Godzina</th>
+                                <th>Poniedziałek</th>
+                                <th>Wtorek</th>
+                                <th>Środa</th>
+                                <th>Czwartek</th>
+                                <th>Piątek</th>
+                            </tr>
+                        </thead>
+                        <tbody id="calendar-body">
+                            <!-- Calendar will be generated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Schedule Section -->
+            <section id="schedule" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Plan Standardowy</h2>
+                </div>
+                
+                <div class="class-info">
+                    <h3>Klasa: <span id="schedule-class-name">5B</span></h3>
+                </div>
+                
+                <div class="calendar-container">
+                    <table class="schedule-table" id="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Godzina</th>
+                                <th>Poniedziałek</th>
+                                <th>Wtorek</th>
+                                <th>Środa</th>
+                                <th>Czwartek</th>
+                                <th>Piątek</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedule-body">
+                            <!-- Schedule will be generated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Material Section -->
+            <section id="material" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Rozkład Materiału</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" id="add-material">Dodaj Tematy</button>
+                    </div>
+                </div>
+                
+                <div class="class-info">
+                    <h3>Klasa: <span id="material-class-name">5B</span></h3>
+                </div>
+                
+                <div class="subject-selector">
+                    <label for="material-subject">Przedmiot:</label>
+                    <select id="material-subject">
+                        <option value="">-- Wybierz przedmiot --</option>
+                    </select>
+                </div>
+                
+                <div class="material-list" id="material-list">
+                    <!-- Material will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Grades Section -->
+            <section id="grades" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">System Oceniania</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" id="add-grade-bulk">Dodaj Oceny Seryjnie</button>
+                        <button class="btn btn-success" id="add-grade-single">Dodaj Ocenę Pojedynczą</button>
+                    </div>
+                </div>
+                
+                <div class="class-info">
+                    <h3>Klasa: <span id="grades-class-name">5B</span></h3>
+                </div>
+                
+                <div class="subject-selector">
+                    <label for="grade-subject">Przedmiot:</label>
+                    <select id="grade-subject">
+                        <option value="">-- Wybierz przedmiot --</option>
+                    </select>
+                    <label for="grade-semester">Semestr:</label>
+                    <select id="grade-semester">
+                        <option value="1">Semestr I</option>
+                        <option value="2">Semestr II</option>
+                    </select>
+                    <label for="grade-category">Kategoria:</label>
+                    <select id="grade-category">
+                        <option value="all">Wszystkie kategorie</option>
+                    </select>
+                </div>
+                
+                <div class="grade-table-container">
+                    <table class="grade-table" id="grade-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Uczeń</th>
+                                <th colspan="20" class="semester-header">Semestr I</th>
+                                <th colspan="20" class="semester-header">Semestr II</th>
+                                <th rowspan="2">Średnia Roczna</th>
+                            </tr>
+                            <tr>
+                                <!-- Semester I columns -->
+                                <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
+                                <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>Śr I</th>
+                                <!-- Semester II columns -->
+                                <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
+                                <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>Śr II</th>
+                            </tr>
+                        </thead>
+                        <tbody id="grade-table-body">
+                            <!-- Grades will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Admin Section -->
+            <section id="admin" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Panel Administratora</h2>
+                </div>
+                
+                <div class="class-info">
+                    <h3>Klasa: <span id="admin-class-name">5B</span></h3>
+                </div>
+                
+                <div class="admin-panel">
+                    <div class="admin-card">
+                        <h3>Zarządzanie Przedmiotami</h3>
+                        <div class="form-group">
+                            <input type="text" id="new-subject-name" placeholder="Nazwa przedmiotu">
+                            <button class="btn btn-primary mt-20" id="add-subject">Dodaj Przedmiot</button>
+                        </div>
+                        <div class="class-list" id="subject-list">
+                            <!-- Subjects will be listed here -->
+                        </div>
+                    </div>
+                    
+                    <div class="admin-card">
+                        <h3>Zarządzanie Uczniami</h3>
+                        <div class="form-group">
+                            <textarea id="student-names" placeholder="Wpisz uczniów (jeden na linijkę):&#10;Jan Kowalski&#10;Anna Nowak" rows="5"></textarea>
+                            <button class="btn btn-primary mt-20" id="add-students">Dodaj Uczniów</button>
+                        </div>
+                        <div class="student-list" id="student-list">
+                            <!-- Students will be listed here -->
+                        </div>
+                    </div>
+                    
+                    <div class="admin-card">
+                        <h3>Kategorie Ocen</h3>
+                        <div class="form-group">
+                            <input type="text" id="new-category-name" placeholder="Nazwa kategorii">
+                            <label for="category-color">Kolor:</label>
+                            <input type="color" id="category-color" value="#3498db" class="color-picker">
+                            <button class="btn btn-primary mt-20" id="add-category">Dodaj Kategorię</button>
+                        </div>
+                        <div class="category-list" id="category-list">
+                            <!-- Categories will be listed here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="lesson-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="lesson-modal-title">Szczegóły Lekcji</h2>
+                <button class="close-button" id="close-lesson-modal">&times;</button>
+            </div>
+            <div id="lesson-modal-body">
+                <!-- Content will be dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="lesson-details-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="lesson-details-modal-title">Realizacja Lekcji</h2>
+                <button class="close-button" id="close-lesson-details-modal">&times;</button>
+            </div>
+            <div id="lesson-details-modal-body">
+                <!-- Content will be dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="schedule-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="schedule-modal-title">Dodaj Lekcję do Planu</h2>
+                <button class="close-button" id="close-schedule-modal">&times;</button>
+            </div>
+            <div id="schedule-modal-body">
+                <!-- Content will be dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="grade-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="grade-modal-title">Dodaj Ocenę</h2>
+                <button class="close-button" id="close-grade-modal">&times;</button>
+            </div>
+            <div id="grade-modal-body">
+                <!-- Content will be dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="grade-details-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="grade-details-modal-title">Szczegóły Oceny</h2>
+                <button class="close-button" id="close-grade-details-modal">&times;</button>
+            </div>
+            <div id="grade-details-modal-body">
+                <!-- Content will be dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="material-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="material-modal-title">Dodaj Tematy</h2>
+                <button class="close-button" id="close-material-modal">&times;</button>
+            </div>
+            <div id="material-modal-body">
+                <!-- Content will be dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Nowy modal dla wydarzeń -->
+    <div class="modal" id="event-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="event-modal-title">Dodaj Wydarzenie</h2>
+                <button class="close-button" id="close-event-modal">&times;</button>
+            </div>
+            <div id="event-modal-body">
+                <!-- Content will be dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="event-details-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="event-details-modal-title">Szczegóły Wydarzenia</h2>
+                <button class="close-button" id="close-event-details-modal">&times;</button>
+            </div>
+            <div id="event-details-modal-body">
+                <!-- Content will be dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal dla zastępstw -->
+    <div class="modal" id="substitution-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="substitution-modal-title">Dodaj Zastępstwo</h2>
+                <button class="close-button" id="close-substitution-modal">&times;</button>
+            </div>
+            <div id="substitution-modal-body">
+                <!-- Content will be dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage and initialization
+        const SCHOOL_YEAR = {
+            start: '2025-09-01',
+            end: '2026-06-26'
+        };
+
+        const GRADE_VALUES = {
+            '1': 1.0, '1+': 1.5, '2-': 1.75, '2': 2.0, '2+': 2.5,
+            '3-': 2.75, '3': 3.0, '3+': 3.5, '4-': 3.75, '4': 4.0,
+            '4+': 4.5, '5-': 4.75, '5': 5.0, '5+': 5.5, '6-': 5.75, '6': 6.0
+        };
+
+        const GRADE_OPTIONS = Object.keys(GRADE_VALUES);
+
+        // Initialize data structures
+        let appData = JSON.parse(localStorage.getItem('classDiary')) || {
+            className: "5B",
+            classTeacher: "Mariusz Górski",
+            subjects: ["Matematyka", "Język polski", "Historia", "Geografia", "Biologia", "Fizyka", "Chemia", "Język angielski"],
+            students: [],
+            schedule: {
+                standard: {},
+                actual: {}
+            },
+            material: {},
+            grades: {},
+            events: [],
+            categories: [
+                { name: 'Odpowiedź ustna', color: '#3498db' },
+                { name: 'Kartkówka', color: '#9b59b6' },
+                { name: 'Sprawdzian', color: '#e74c3c' },
+                { name: 'Praca domowa', color: '#f39c12' },
+                { name: 'Aktywność', color: '#27ae60' }
+            ]
+        };
+
+        // Current state
+        let currentWeek = getCurrentWeek();
+        let currentEditingCell = null;
+        let currentSubstitutionData = null;
+
+        // Initialize the application
+        function initApp() {
+            setupEventListeners();
+            loadInitialData();
+            showSection('home');
+            generateWeeklyCalendar();
+            loadUpcomingEvents();
+            updateClassInfo();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Tab navigation
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.getAttribute('data-tab');
+                    showSection(tabName);
+                });
+            });
+
+            // Week navigation
+            document.getElementById('prev-week').addEventListener('click', () => {
+                currentWeek.start.setDate(currentWeek.start.getDate() - 7);
+                currentWeek.end.setDate(currentWeek.end.getDate() - 7);
+                generateWeeklyCalendar();
+                loadUpcomingEvents();
+            });
+
+            document.getElementById('next-week').addEventListener('click', () => {
+                currentWeek.start.setDate(currentWeek.start.getDate() + 7);
+                currentWeek.end.setDate(currentWeek.end.getDate() + 7);
+                generateWeeklyCalendar();
+                loadUpcomingEvents();
+            });
+
+            // Modal close buttons
+            document.getElementById('close-lesson-modal').addEventListener('click', () => {
+                document.getElementById('lesson-modal').style.display = 'none';
+            });
+
+            document.getElementById('close-lesson-details-modal').addEventListener('click', () => {
+                document.getElementById('lesson-details-modal').style.display = 'none';
+            });
+
+            document.getElementById('close-schedule-modal').addEventListener('click', () => {
+                document.getElementById('schedule-modal').style.display = 'none';
+            });
+
+            document.getElementById('close-grade-modal').addEventListener('click', () => {
+                document.getElementById('grade-modal').style.display = 'none';
+            });
+
+            document.getElementById('close-grade-details-modal').addEventListener('click', () => {
+                document.getElementById('grade-details-modal').style.display = 'none';
+            });
+
+            document.getElementById('close-material-modal').addEventListener('click', () => {
+                document.getElementById('material-modal').style.display = 'none';
+            });
+
+            // Nowe przyciski dla wydarzeń
+            document.getElementById('close-event-modal').addEventListener('click', () => {
+                document.getElementById('event-modal').style.display = 'none';
+            });
+
+            document.getElementById('close-event-details-modal').addEventListener('click', () => {
+                document.getElementById('event-details-modal').style.display = 'none';
+            });
+
+            // Modal dla zastępstw
+            document.getElementById('close-substitution-modal').addEventListener('click', () => {
+                document.getElementById('substitution-modal').style.display = 'none';
+            });
+
+            // Admin actions
+            document.getElementById('add-subject').addEventListener('click', addSubject);
+            document.getElementById('add-students').addEventListener('click', addStudents);
+            document.getElementById('add-category').addEventListener('click', addCategory);
+
+            // Other actions
+            document.getElementById('add-material').addEventListener('click', showMaterialForm);
+            document.getElementById('add-grade-bulk').addEventListener('click', showBulkGradeForm);
+            document.getElementById('add-grade-single').addEventListener('click', showSingleGradeForm);
+
+            // Dodane: przycisk dodawania wydarzeń
+            document.getElementById('add-event-btn').addEventListener('click', showEventForm);
+
+            // Dynamic select changes
+            document.getElementById('material-subject').addEventListener('change', loadMaterial);
+            document.getElementById('grade-subject').addEventListener('change', loadGrades);
+            document.getElementById('grade-semester').addEventListener('change', loadGrades);
+            document.getElementById('grade-category').addEventListener('change', loadGrades);
+        }
+
+        // Load initial data
+        function loadInitialData() {
+            loadSubjects();
+            loadSchedule();
+            loadGrades();
+        }
+
+        // Update class info in all sections
+        function updateClassInfo() {
+            document.querySelectorAll('#current-class-name, #schedule-class-name, #material-class-name, #grades-class-name, #admin-class-name').forEach(el => {
+                el.textContent = appData.className;
+            });
+            document.getElementById('class-teacher').textContent = appData.classTeacher;
+        }
+
+        // Show section function
+        function showSection(sectionName) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.getElementById(sectionName).classList.add('active');
+            document.querySelector(`[data-tab="${sectionName}"]`).classList.add('active');
+
+            if (sectionName === 'grades') {
+                loadGrades();
+            } else if (sectionName === 'material') {
+                loadMaterial();
+            } else if (sectionName === 'admin') {
+                loadAdminData();
+            } else if (sectionName === 'schedule') {
+                loadSchedule();
+            } else if (sectionName === 'home') {
+                generateWeeklyCalendar();
+                loadUpcomingEvents();
+            }
+        }
+
+        function getCurrentWeek() {
+            const today = new Date();
+            const start = new Date(today);
+            
+            // Ustawiamy godzinę na 12:00:00 aby uniknąć problemów ze strefami czasowymi
+            start.setHours(12, 0, 0, 0);
+            
+            // Obliczamy poniedziałek: 
+            // - getDay() zwraca 0 dla niedzieli, 1 dla poniedziałku, ..., 6 dla soboty
+            // - Aby dostać poniedziałek: odejmujemy (dzień tygodnia - 1), 
+            //   ale jeśli to niedziela (0), to odejmujemy -6 żeby dostać poprzedni poniedziałek
+            const day = start.getDay();
+            const diff = start.getDate() - day + (day === 0 ? -6 : 1);
+            
+            start.setDate(diff);
+            
+            const end = new Date(start);
+            end.setDate(start.getDate() + 4);
+            
+            return { start, end };
+        }
+
+        function generateWeeklyCalendar() {
+            const calendarBody = document.getElementById('calendar-body');
+            const weekRangeElement = document.getElementById('week-range');
+            
+            const options = { day: 'numeric', month: 'long' };
+            weekRangeElement.textContent = 
+                `${currentWeek.start.toLocaleDateString('pl-PL', options)} - ${currentWeek.end.toLocaleDateString('pl-PL', options)}`;
+            
+            calendarBody.innerHTML = '';
+            
+            for (let hour = 1; hour <= 10; hour++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td class="time-header">${hour}</td>`;
+                
+                for (let day = 0; day < 5; day++) {
+                    const cellDate = new Date(currentWeek.start);
+                    cellDate.setDate(currentWeek.start.getDate() + day);
+                    
+                    const cell = document.createElement('td');
+                    cell.className = 'lesson-cell';
+                    cell.setAttribute('data-hour', hour);
+                    cell.setAttribute('data-day', day);
+                    cell.setAttribute('data-date', formatDate(cellDate));
+                    
+                    const dateKey = formatDate(cellDate);
+                    const dayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+                    const dayName = dayNames[day];
+                    
+                    const actualLesson = appData.schedule.actual[dateKey] && appData.schedule.actual[dateKey][hour];
+                    const standardLesson = appData.schedule.standard[dayName] && appData.schedule.standard[dayName][hour];
+                    const lesson = actualLesson || standardLesson;
+                    
+                    const events = getEventsForDateAndHour(dateKey, hour);
+                    
+                    if (lesson) {
+                        const lessonClass = getLessonClass(lesson.status || 'normal');
+                        let statusText = '';
+                        
+                        if (lesson.status === 'cancelled') statusText = 'Odwołana';
+                        else if (lesson.status === 'substitution') statusText = 'Zastępstwo';
+                        else if (lesson.status === 'substitute_for') statusText = 'Zastępuję za: ' + lesson.substituteFor;
+                        else if (lesson.status === 'completed') statusText = 'Zrealizowana';
+                        
+                        cell.innerHTML = `
+                            <div class="lesson-item ${lessonClass}" data-date="${dateKey}" data-hour="${hour}">
+                                <div class="lesson-class">${lesson.subject}</div>
+                                ${lesson.topic ? `<div class="lesson-topic">${lesson.topic}</div>` : ''}
+                                ${statusText ? `<div class="lesson-status">${statusText}</div>` : ''}
+                                ${events.length > 0 ? `<div class="event-badge">!</div>` : ''}
+                                ${lesson.hasGrades ? `<div class="grade-indicator">✓</div>` : ''}
+                                ${lesson.hasQuiz ? `<div class="quiz-indicator">Q</div>` : ''}
+                            </div>
+                        `;
+                        
+                        // Dodaj wydarzenia do komórki
+                        if (events.length > 0) {
+                            events.forEach(event => {
+                                const eventElement = document.createElement('div');
+                                eventElement.className = 'event-item';
+                                eventElement.setAttribute('data-event-id', event.id);
+                                eventElement.innerHTML = `
+                                    <div class="event-item-title">${event.title}</div>
+                                `;
+                                eventElement.addEventListener('click', () => {
+                                    showEventDetails(event.id);
+                                });
+                                cell.appendChild(eventElement);
+                            });
+                        }
+                        
+                        cell.querySelector('.lesson-item').addEventListener('click', () => {
+                            showLessonDetails(dateKey, hour, lesson, events);
+                        });
+                    } else {
+                        cell.innerHTML = `<div class="lesson-item" data-date="${dateKey}" data-hour="${hour}"></div>`;
+                        cell.querySelector('.lesson-item').addEventListener('click', () => {
+                            showSubstitutionForm(dateKey, hour);
+                        });
+                        
+                        // Dodaj wydarzenia do pustej komórki
+                        if (events.length > 0) {
+                            events.forEach(event => {
+                                const eventElement = document.createElement('div');
+                                eventElement.className = 'event-item';
+                                eventElement.setAttribute('data-event-id', event.id);
+                                eventElement.innerHTML = `
+                                    <div class="event-item-title">${event.title}</div>
+                                `;
+                                eventElement.addEventListener('click', () => {
+                                    showEventDetails(event.id);
+                                });
+                                cell.appendChild(eventElement);
+                            });
+                        }
+                    }
+                    
+                    row.appendChild(cell);
+                }
+                
+                calendarBody.appendChild(row);
+            }
+        }
+
+        function getEventsForDateAndHour(date, hour) {
+            return appData.events.filter(event => {
+                return event.date === date && (!event.lesson || event.lesson == hour);
+            });
+        }
+
+        function getLessonClass(status) {
+            switch(status) {
+                case 'normal': return 'lesson-normal';
+                case 'substitution': return 'lesson-substitution';
+                case 'substitute_for': return 'lesson-substitute-for';
+                case 'completed': return 'lesson-completed';
+                case 'cancelled': return 'lesson-cancelled';
+                case 'exam': return 'lesson-exam';
+                case 'quiz': return 'lesson-quiz';
+                default: return 'lesson-normal';
+            }
+        }
+
+        // Schedule functions - SIMPLIFIED VERSION
+        function loadSchedule() {
+            const scheduleBody = document.getElementById('schedule-body');
+            scheduleBody.innerHTML = '';
+            
+            for (let hour = 1; hour <= 10; hour++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td class="time-header">${hour}</td>`;
+                
+                const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+                
+                days.forEach(day => {
+                    const cell = document.createElement('td');
+                    cell.setAttribute('data-day', day);
+                    cell.setAttribute('data-hour', hour);
+                    
+                    const lesson = appData.schedule.standard[day] && appData.schedule.standard[day][hour];
+                    
+                    if (lesson) {
+                        cell.innerHTML = `
+                            <div class="schedule-lesson">
+                                <strong>${lesson.subject}</strong>
+                            </div>
+                        `;
+                    }
+                    
+                    cell.addEventListener('click', () => {
+                        showScheduleLessonForm(day, hour, lesson);
+                    });
+                    
+                    row.appendChild(cell);
+                });
+                
+                scheduleBody.appendChild(row);
+            }
+        }
+
+        function showScheduleLessonForm(day, hour, existingLesson = null) {
+            currentEditingCell = { day, hour };
+            const modal = document.getElementById('schedule-modal');
+            const title = document.getElementById('schedule-modal-title');
+            const body = document.getElementById('schedule-modal-body');
+            
+            title.textContent = existingLesson ? 'Edytuj Lekcję' : 'Dodaj Lekcję do Planu';
+            
+            body.innerHTML = `
+                <div class="form-group">
+                    <label for="schedule-subject">Przedmiot:</label>
+                    <select id="schedule-subject" required>
+                        <option value="">-- Wybierz przedmiot --</option>
+                        ${appData.subjects.map(s => 
+                            `<option value="${s}" ${existingLesson && existingLesson.subject === s ? 'selected' : ''}>${s}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" id="cancel-schedule">Anuluj</button>
+                    <button class="btn btn-primary" id="save-schedule">${existingLesson ? 'Zapisz' : 'Dodaj'}</button>
+                    ${existingLesson ? `<button class="btn btn-danger" id="delete-schedule">Usuń</button>` : ''}
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            
+            document.getElementById('cancel-schedule').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            document.getElementById('save-schedule').addEventListener('click', saveScheduleLesson);
+            
+            if (existingLesson) {
+                document.getElementById('delete-schedule').addEventListener('click', () => {
+                    if (confirm('Czy na pewno chcesz usunąć tę lekcję z planu?')) {
+                        delete appData.schedule.standard[day][hour];
+                        if (Object.keys(appData.schedule.standard[day]).length === 0) {
+                            delete appData.schedule.standard[day];
+                        }
+                        saveData();
+                        loadSchedule();
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        function saveScheduleLesson() {
+            const day = currentEditingCell.day;
+            const hour = currentEditingCell.hour;
+            const subject = document.getElementById('schedule-subject').value;
+            
+            if (!subject) {
+                alert('Proszę wybrać przedmiot');
+                return;
+            }
+            
+            if (!appData.schedule.standard[day]) {
+                appData.schedule.standard[day] = {};
+            }
+            
+            appData.schedule.standard[day][hour] = {
+                subject: subject
+            };
+            
+            saveData();
+            loadSchedule();
+            document.getElementById('schedule-modal').style.display = 'none';
+            alert('Lekcja została dodana do planu standardowego');
+        }
+
+        // Lesson details and realization functions
+        function showLessonDetails(date, hour, lesson, events) {
+            const modal = document.getElementById('lesson-modal');
+            const title = document.getElementById('lesson-modal-title');
+            const body = document.getElementById('lesson-modal-body');
+            
+            title.textContent = 'Szczegóły Lekcji';
+            
+            let content = '';
+            
+            if (lesson) {
+                content += `
+                    <div class="grade-details">
+                        <h3>Lekcja:</h3>
+                        <p><strong>Przedmiot:</strong> ${lesson.subject}</p>
+                        ${lesson.topic ? `<p><strong>Temat:</strong> ${lesson.topic}</p>` : ''}
+                        <p><strong>Data:</strong> ${formatDisplayDate(date)}</p>
+                        <p><strong>Godzina:</strong> ${hour}</p>
+                        ${lesson.notes ? `<p><strong>Uwagi:</strong> ${lesson.notes}</p>` : ''}
+                        ${lesson.hasGrades ? `<p><strong>✓ Dodano oceny</strong></p>` : ''}
+                        ${lesson.hasQuiz ? `<p><strong>✓ Zapowiedziana kartkówka/sprawdzian</strong></p>` : ''}
+                    </div>
+                `;
+                
+                if (lesson.status === 'substitute_for') {
+                    content += `
+                        <div class="substitution-details">
+                            <p><strong>Zastępuję za:</strong> ${lesson.substituteFor}</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            if (events.length > 0) {
+                content += `<div class="grade-details"><h3>Wydarzenia:</h3>`;
+                events.forEach(event => {
+                    const category = appData.categories.find(c => c.name === event.category);
+                    const color = category ? category.color : '#3498db';
+                    content += `
+                        <div style="border-left: 4px solid ${color}; padding-left: 10px; margin-bottom: 10px;">
+                            <p><strong>${event.title}</strong></p>
+                            <p>${event.description || 'Brak opisu'}</p>
+                            <p><small>Kategoria: ${event.category}</small></p>
+                        </div>
+                    `;
+                });
+                content += `</div>`;
+            }
+            
+            content += `
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="edit-lesson-details">Realizacja Lekcji</button>
+                    <button class="btn btn-secondary" id="close-details">Zamknij</button>
+                </div>
+            `;
+            
+            body.innerHTML = content;
+            
+            modal.style.display = 'flex';
+            
+            document.getElementById('close-details').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            document.getElementById('edit-lesson-details').addEventListener('click', () => {
+                modal.style.display = 'none';
+                showLessonRealizationForm(date, hour, lesson);
+            });
+        }
+
+        function showLessonRealizationForm(date, hour, lesson) {
+            const modal = document.getElementById('lesson-details-modal');
+            const title = document.getElementById('lesson-details-modal-title');
+            const body = document.getElementById('lesson-details-modal-body');
+            
+            title.textContent = 'Realizacja Lekcji';
+            
+            const materialKey = `${lesson.subject}`;
+            const material = appData.material[materialKey] || [];
+            
+            body.innerHTML = `
+                <div class="lesson-details-section">
+                    <h3>Wybierz temat lekcji:</h3>
+                    <div class="topic-list">
+                        ${material.length > 0 ? material.map((topic, index) => `
+                            <div class="topic-item ${topic.completed ? 'completed' : ''}">
+                                <input type="checkbox" class="topic-checkbox" data-index="${index}" ${topic.completed ? 'checked' : ''}>
+                                <span>${topic.topic}</span>
+                                ${topic.date ? `<small>(${formatDisplayDate(topic.date)})</small>` : ''}
+                            </div>
+                        `).join('') : '<p>Brak tematów w rozkładzie materiału</p>'}
+                    </div>
+                </div>
+                
+                <div class="lesson-details-section">
+                    <h3>Status lekcji:</h3>
+                    <div class="form-group">
+                        <select id="lesson-status">
+                            <option value="completed" ${lesson.status === 'completed' ? 'selected' : ''}>Zrealizowana normalnie</option>
+                            <option value="cancelled" ${lesson.status === 'cancelled' ? 'selected' : ''}>Odwołana</option>
+                            <option value="substitution" ${lesson.status === 'substitution' ? 'selected' : ''}>Zastępstwo (inny nauczyciel)</option>
+                        </select>
+                    </div>
+                    
+                    <div id="substitute-for-container" style="display: ${lesson.status === 'substitute_for' ? 'block' : 'none'};">
+                        <div class="form-group">
+                            <label for="substitute-for">Zastępuję za:</label>
+                            <input type="text" id="substitute-for" value="${lesson.substituteFor || ''}" placeholder="Imię i nazwisko nauczyciela">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-details-section">
+                    <h3>Dodatkowe informacje:</h3>
+                    <div class="form-group">
+                        <textarea id="lesson-notes" rows="3" placeholder="Dodatkowe uwagi o lekcji...">${lesson.notes || ''}</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="lesson-has-grades" ${lesson.hasGrades ? 'checked' : ''}>
+                            Dodano oceny na tej lekcji?
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="lesson-has-quiz" ${lesson.hasQuiz ? 'checked' : ''}>
+                            Zapowiedziana praca klasowa?
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary" id="cancel-lesson-realization">Anuluj</button>
+                    <button class="btn btn-primary" id="save-lesson-realization">Zapisz</button>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            
+            document.getElementById('lesson-status').addEventListener('change', function() {
+                document.getElementById('substitute-for-container').style.display = 
+                    this.value === 'substitute_for' ? 'block' : 'none';
+            });
+            
+            document.getElementById('cancel-lesson-realization').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            document.getElementById('save-lesson-realization').addEventListener('click', () => {
+                saveLessonRealization(date, hour, lesson, materialKey);
+            });
+        }
+
+        function saveLessonRealization(date, hour, lesson, materialKey) {
+            const status = document.getElementById('lesson-status').value;
+            const substituteFor = document.getElementById('substitute-for').value;
+            const notes = document.getElementById('lesson-notes').value;
+            const hasGrades = document.getElementById('lesson-has-grades').checked;
+            const hasQuiz = document.getElementById('lesson-has-quiz').checked;
+            
+            if (!appData.schedule.actual[date]) {
+                appData.schedule.actual[date] = {};
+            }
+            
+            appData.schedule.actual[date][hour] = {
+                ...lesson,
+                status: status,
+                substituteFor: status === 'substitute_for' ? substituteFor : undefined,
+                notes: notes,
+                hasGrades: hasGrades,
+                hasQuiz: hasQuiz,
+                completedDate: status === 'completed' ? date : undefined
+            };
+            
+            const checkboxes = document.querySelectorAll('.topic-checkbox');
+            checkboxes.forEach(checkbox => {
+                const index = parseInt(checkbox.getAttribute('data-index'));
+                if (checkbox.checked && appData.material[materialKey] && appData.material[materialKey][index]) {
+                    appData.material[materialKey][index].completed = true;
+                    if (!appData.material[materialKey][index].date) {
+                        appData.material[materialKey][index].date = date;
+                    }
+                }
+            });
+            
+            saveData();
+            generateWeeklyCalendar();
+            document.getElementById('lesson-details-modal').style.display = 'none';
+            alert('Zapisano realizację lekcji');
+        }
+
+        // Funkcja do pokazywania formularza zastępstwa
+        function showSubstitutionForm(date, hour) {
+            currentSubstitutionData = { date, hour };
+            const modal = document.getElementById('substitution-modal');
+            const title = document.getElementById('substitution-modal-title');
+            const body = document.getElementById('substitution-modal-body');
+            
+            title.textContent = 'Dodaj Zastępstwo';
+            
+            body.innerHTML = `
+                <div class="form-group">
+                    <label for="substitution-subject">Przedmiot:</label>
+                    <select id="substitution-subject" required>
+                        <option value="">-- Wybierz przedmiot --</option>
+                        ${appData.subjects.map(s => `<option value="${s}">${s}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="substitution-type">Typ zastępstwa:</label>
+                    <select id="substitution-type" required>
+                        <option value="substitute_for">Zastępuję za kogoś</option>
+                    </select>
+                </div>
+                <div id="substitute-for-input-container" style="display: none;">
+                    <div class="form-group">
+                        <label for="substitute-for-teacher">Zastępuję za:</label>
+                        <input type="text" id="substitute-for-teacher" placeholder="Imię i nazwisko nauczyciela">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="substitution-topic">Temat lekcji:</label>
+                    <input type="text" id="substitution-topic" placeholder="Temat lekcji (opcjonalnie)">
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" id="cancel-substitution">Anuluj</button>
+                    <button class="btn btn-primary" id="save-substitution">Dodaj Zastępstwo</button>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            
+            document.getElementById('substitution-type').addEventListener('change', function() {
+                document.getElementById('substitute-for-input-container').style.display = 
+                    this.value === 'substitute_for' ? 'block' : 'none';
+            });
+            
+            document.getElementById('cancel-substitution').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            document.getElementById('save-substitution').addEventListener('click', saveSubstitution);
+        }
+
+        function saveSubstitution() {
+            const date = currentSubstitutionData.date;
+            const hour = currentSubstitutionData.hour;
+            const subject = document.getElementById('substitution-subject').value;
+            const type = document.getElementById('substitution-type').value;
+            const substituteFor = document.getElementById('substitute-for-teacher').value;
+            const topic = document.getElementById('substitution-topic').value;
+            
+            if (!subject) {
+                alert('Proszę wybrać przedmiot');
+                return;
+            }
+            
+            if (type === 'substitute_for' && !substituteFor) {
+                alert('Proszę wpisać za kogo jest zastępstwo');
+                return;
+            }
+            
+            if (!appData.schedule.actual[date]) {
+                appData.schedule.actual[date] = {};
+            }
+            
+            appData.schedule.actual[date][hour] = {
+                subject: subject,
+                status: type,
+                substituteFor: type === 'substitute_for' ? substituteFor : undefined,
+                topic: topic || '',
+                isSubstitution: true
+            };
+            
+            saveData();
+            generateWeeklyCalendar();
+            document.getElementById('substitution-modal').style.display = 'none';
+            alert('Zastępstwo zostało dodane');
+        }
+
+        // Grade management functions
+        function loadGrades() {
+            const subject = document.getElementById('grade-subject').value;
+            const semester = document.getElementById('grade-semester').value;
+            const category = document.getElementById('grade-category').value;
+            
+            if (!subject) return;
+            
+            const gradeTableBody = document.getElementById('grade-table-body');
+            gradeTableBody.innerHTML = '';
+            
+            const students = appData.students || [];
+            const subjectGrades = appData.grades[subject] || {};
+            
+            students.forEach(student => {
+                const row = document.createElement('tr');
+                
+                const nameCell = document.createElement('td');
+                nameCell.className = 'student-name';
+                nameCell.textContent = student;
+                row.appendChild(nameCell);
+                
+                const sem1Grades = subjectGrades[student]?.['1'] || [];
+                const filteredSem1Grades = category === 'all' ? sem1Grades : sem1Grades.filter(g => g && g.category === category);
+                
+                for (let i = 0; i < 19; i++) {
+                    const gradeCell = document.createElement('td');
+                    gradeCell.className = 'grade-cell';
+                    gradeCell.setAttribute('data-student', student);
+                    gradeCell.setAttribute('data-semester', '1');
+                    gradeCell.setAttribute('data-index', i);
+                    
+                    if (filteredSem1Grades[i]) {
+                        const categoryObj = appData.categories.find(c => c.name === filteredSem1Grades[i].category);
+                        const color = categoryObj ? categoryObj.color : '#3498db';
+                        gradeCell.style.backgroundColor = color;
+                        gradeCell.style.color = 'white';
+                        gradeCell.textContent = filteredSem1Grades[i].grade;
+                    }
+                    
+                    gradeCell.addEventListener('click', () => {
+                        showGradeDetails(student, subject, '1', i);
+                    });
+                    
+                    row.appendChild(gradeCell);
+                }
+                
+                const avg1Cell = document.createElement('td');
+                avg1Cell.className = 'average-cell';
+                avg1Cell.textContent = calculateAverage(filteredSem1Grades);
+                row.appendChild(avg1Cell);
+                
+                const sem2Grades = subjectGrades[student]?.['2'] || [];
+                const filteredSem2Grades = category === 'all' ? sem2Grades : sem2Grades.filter(g => g && g.category === category);
+                
+                for (let i = 0; i < 19; i++) {
+                    const gradeCell = document.createElement('td');
+                    gradeCell.className = 'grade-cell';
+                    gradeCell.setAttribute('data-student', student);
+                    gradeCell.setAttribute('data-semester', '2');
+                    gradeCell.setAttribute('data-index', i);
+                    
+                    if (filteredSem2Grades[i]) {
+                        const categoryObj = appData.categories.find(c => c.name === filteredSem2Grades[i].category);
+                        const color = categoryObj ? categoryObj.color : '#3498db';
+                        gradeCell.style.backgroundColor = color;
+                        gradeCell.style.color = 'white';
+                        gradeCell.textContent = filteredSem2Grades[i].grade;
+                    }
+                    
+                    gradeCell.addEventListener('click', () => {
+                        showGradeDetails(student, subject, '2', i);
+                    });
+                    
+                    row.appendChild(gradeCell);
+                }
+                
+                const avg2Cell = document.createElement('td');
+                avg2Cell.className = 'average-cell';
+                avg2Cell.textContent = calculateAverage(filteredSem2Grades);
+                row.appendChild(avg2Cell);
+                
+                const yearlyAvgCell = document.createElement('td');
+                yearlyAvgCell.className = 'average-cell';
+                const allGrades = [...filteredSem1Grades, ...filteredSem2Grades];
+                yearlyAvgCell.textContent = calculateAverage(allGrades);
+                row.appendChild(yearlyAvgCell);
+                
+                gradeTableBody.appendChild(row);
+            });
+        }
+
+        function calculateAverage(grades) {
+            const validGrades = grades.filter(g => g && g.grade);
+            if (validGrades.length === 0) return '-';
+            
+            const sum = validGrades.reduce((total, grade) => {
+                return total + (GRADE_VALUES[grade.grade] || 0);
+            }, 0);
+            
+            return (sum / validGrades.length).toFixed(2);
+        }
+
+        function showGradeDetails(student, subject, semester, index) {
+            const grade = appData.grades[subject]?.[student]?.[semester]?.[index];
+            if (!grade) {
+                showSingleGradeForm(student, subject, semester, index);
+                return;
+            }
+            
+            const modal = document.getElementById('grade-details-modal');
+            const title = document.getElementById('grade-details-modal-title');
+            const body = document.getElementById('grade-details-modal-body');
+            
+            title.textContent = 'Szczegóły Oceny';
+            
+            const categoryObj = appData.categories.find(c => c.name === grade.category);
+            const color = categoryObj ? categoryObj.color : '#3498db';
+            
+            body.innerHTML = `
+                <div class="grade-details">
+                    <p><strong>Uczeń:</strong> ${student}</p>
+                    <p><strong>Przedmiot:</strong> ${subject}</p>
+                    <p><strong>Ocena:</strong> ${grade.grade}</p>
+                    <p><strong>Kategoria:</strong> <span style="color: ${color}">${grade.category}</span></p>
+                    <p><strong>Temat:</strong> ${grade.topic || 'Brak opisu'}</p>
+                    <p><strong>Data:</strong> ${formatDisplayDate(grade.date)}</p>
+                    <p><strong>Semestr:</strong> ${semester}</p>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="edit-grade-details">Edytuj</button>
+                    <button class="btn btn-danger" id="delete-grade-details">Usuń</button>
+                    <button class="btn btn-secondary" id="close-grade-details">Zamknij</button>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            
+            document.getElementById('close-grade-details').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            document.getElementById('edit-grade-details').addEventListener('click', () => {
+                modal.style.display = 'none';
+                showSingleGradeForm(student, subject, semester, index);
+            });
+            
+            document.getElementById('delete-grade-details').addEventListener('click', () => {
+                if (confirm('Czy na pewno chcesz usunąć tę ocenę?')) {
+                    delete appData.grades[subject][student][semester][index];
+                    saveData();
+                    loadGrades();
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        function showBulkGradeForm() {
+            const subject = document.getElementById('grade-subject').value;
+            if (!subject) {
+                alert('Wybierz przedmiot najpierw');
+                return;
+            }
+            
+            const modal = document.getElementById('grade-modal');
+            const title = document.getElementById('grade-modal-title');
+            const body = document.getElementById('grade-modal-body');
+            
+            title.textContent = 'Dodaj Oceny Seryjnie';
+            
+            body.innerHTML = `
+                <div class="grade-entry-form">
+                    <div class="form-group">
+                        <label for="bulk-topic">Temat/Opis:</label>
+                        <input type="text" id="bulk-topic" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bulk-category">Kategoria:</label>
+                        <select id="bulk-category" required>
+                            <option value="">-- Wybierz kategorię --</option>
+                            ${appData.categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bulk-semester">Semestr:</label>
+                        <select id="bulk-semester" required>
+                            <option value="1">Semestr I</option>
+                            <option value="2">Semestr II</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bulk-date">Data:</label>
+                        <input type="date" id="bulk-date" required>
+                    </div>
+                </div>
+                
+                <div class="student-grades-entry">
+                    <h4>Oceny dla uczniów:</h4>
+                    ${(appData.students || []).map(student => `
+                        <div class="student-grade-row">
+                            <span>${student}</span>
+                            <select class="student-grade" data-student="${student}">
+                                <option value="">-- Brak oceny --</option>
+                                ${GRADE_OPTIONS.map(grade => `<option value="${grade}">${grade}</option>`).join('')}
+                            </select>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary" id="cancel-bulk-grade">Anuluj</button>
+                    <button class="btn btn-primary" id="save-bulk-grade">Zapisz Oceny</button>
+                </div>
+            `;
+            
+            document.getElementById('bulk-date').value = new Date().toISOString().split('T')[0];
+            
+            modal.style.display = 'flex';
+            
+            document.getElementById('cancel-bulk-grade').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            document.getElementById('save-bulk-grade').addEventListener('click', saveBulkGrades);
+        }
+
+        function saveBulkGrades() {
+            const subject = document.getElementById('grade-subject').value;
+            const topic = document.getElementById('bulk-topic').value;
+            const category = document.getElementById('bulk-category').value;
+            const semester = document.getElementById('bulk-semester').value;
+            const date = document.getElementById('bulk-date').value;
+            
+            if (!topic || !category) {
+                alert('Proszę wypełnić wymagane pola');
+                return;
+            }
+            
+            if (!appData.grades[subject]) {
+                appData.grades[subject] = {};
+            }
+            
+            const students = appData.students || [];
+            let gradesAdded = 0;
+            
+            students.forEach(student => {
+                const gradeSelect = document.querySelector(`.student-grade[data-student="${student}"]`);
+                const gradeValue = gradeSelect.value;
+                
+                if (gradeValue) {
+                    if (!appData.grades[subject][student]) {
+                        appData.grades[subject][student] = { '1': [], '2': [] };
+                    }
+                    
+                    const semesterGrades = appData.grades[subject][student][semester];
+                    let emptyIndex = -1;
+                    
+                    for (let i = 0; i < 19; i++) {
+                        if (!semesterGrades[i]) {
+                            emptyIndex = i;
+                            break;
+                        }
+                    }
+                    
+                    if (emptyIndex !== -1) {
+                        semesterGrades[emptyIndex] = {
+                            grade: gradeValue,
+                            category: category,
+                            topic: topic,
+                            date: date
+                        };
+                        gradesAdded++;
+                    }
+                }
+            });
+            
+            if (gradesAdded > 0) {
+                saveData();
+                loadGrades();
+                document.getElementById('grade-modal').style.display = 'none';
+                alert(`Dodano ${gradesAdded} ocen`);
+            } else {
+                alert('Nie dodano żadnych ocen');
+            }
+        }
+
+        function showSingleGradeForm(student = null, subject = null, semester = null, index = null) {
+            const currentSubject = subject || document.getElementById('grade-subject').value;
+            if (!currentSubject) {
+                alert('Wybierz przedmiot najpierw');
+                return;
+            }
+            
+            const isEdit = !!(student && semester !== null && index !== null);
+            const existingGrade = isEdit ? (appData.grades[currentSubject]?.[student]?.[semester]?.[index] || null) : null;
+            
+            const modal = document.getElementById('grade-modal');
+            const title = document.getElementById('grade-modal-title');
+            const body = document.getElementById('grade-modal-body');
+            
+            title.textContent = isEdit ? 'Edytuj Ocenę' : 'Dodaj Ocenę Pojedynczą';
+            
+            body.innerHTML = `
+                <div class="form-group">
+                    <label for="single-student">Uczeń:</label>
+                    <select id="single-student" ${isEdit ? 'disabled' : ''} required>
+                        <option value="">-- Wybierz ucznia --</option>
+                        ${(appData.students || []).map(s => 
+                            `<option value="${s}" ${isEdit && student === s ? 'selected' : ''}>${s}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="single-grade">Ocena:</label>
+                    <select id="single-grade" required>
+                        <option value="">-- Wybierz ocenę --</option>
+                        ${GRADE_OPTIONS.map(grade => 
+                            `<option value="${grade}" ${isEdit && existingGrade && existingGrade.grade === grade ? 'selected' : ''}>${grade}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="single-category">Kategoria:</label>
+                    <select id="single-category" required>
+                        <option value="">-- Wybierz kategorię --</option>
+                        ${appData.categories.map(c => 
+                            `<option value="${c.name}" ${isEdit && existingGrade && existingGrade.category === c.name ? 'selected' : ''}>${c.name}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="single-topic">Temat/Opis:</label>
+                    <input type="text" id="single-topic" value="${isEdit && existingGrade ? existingGrade.topic || '' : ''}">
+                </div>
+                <div class="form-group">
+                    <label for="single-semester">Semestr:</label>
+                    <select id="single-semester" ${isEdit ? 'disabled' : ''} required>
+                        <option value="1" ${isEdit && semester === '1' ? 'selected' : ''}>Semestr I</option>
+                        <option value="2" ${isEdit && semester === '2' ? 'selected' : ''}>Semestr II</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="single-date">Data:</label>
+                    <input type="date" id="single-date" value="${isEdit && existingGrade ? existingGrade.date : new Date().toISOString().split('T')[0]}" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary" id="cancel-single-grade">Anuluj</button>
+                    <button class="btn btn-primary" id="save-single-grade">${isEdit ? 'Zapisz' : 'Dodaj'}</button>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            
+            document.getElementById('cancel-single-grade').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            document.getElementById('save-single-grade').addEventListener('click', () => {
+                saveSingleGrade(isEdit, student, currentSubject, semester, index);
+            });
+        }
+
+        function saveSingleGrade(isEdit, student, subject, semester, index) {
+            const currentStudent = isEdit ? student : document.getElementById('single-student').value;
+            const grade = document.getElementById('single-grade').value;
+            const category = document.getElementById('single-category').value;
+            const topic = document.getElementById('single-topic').value;
+            const currentSemester = isEdit ? semester : document.getElementById('single-semester').value;
+            const date = document.getElementById('single-date').value;
+            
+            if (!currentStudent || !grade || !category) {
+                alert('Proszę wypełnić wymagane pola');
+                return;
+            }
+            
+            if (!appData.grades[subject]) {
+                appData.grades[subject] = {};
+            }
+            
+            if (!appData.grades[subject][currentStudent]) {
+                appData.grades[subject][currentStudent] = { '1': [], '2': [] };
+            }
+            
+            const gradeData = {
+                grade: grade,
+                category: category,
+                topic: topic,
+                date: date
+            };
+            
+            if (isEdit) {
+                appData.grades[subject][currentStudent][currentSemester][index] = gradeData;
+            } else {
+                const semesterGrades = appData.grades[subject][currentStudent][currentSemester];
+                let emptyIndex = -1;
+                
+                for (let i = 0; i < 19; i++) {
+                    if (!semesterGrades[i]) {
+                        emptyIndex = i;
+                        break;
+                    }
+                }
+                
+                if (emptyIndex !== -1) {
+                    semesterGrades[emptyIndex] = gradeData;
+                } else {
+                    alert('Brak miejsca na nowe oceny w tym semestrze');
+                    return;
+                }
+            }
+            
+            saveData();
+            loadGrades();
+            document.getElementById('grade-modal').style.display = 'none';
+        }
+
+        // Material plan functions
+        function loadMaterial() {
+            const subject = document.getElementById('material-subject').value;
+            
+            if (!subject) return;
+            
+            const materialList = document.getElementById('material-list');
+            materialList.innerHTML = '';
+            
+            const material = appData.material[subject] || [];
+            
+            if (material.length === 0) {
+                materialList.innerHTML = '<div class="material-item">Brak materiału dla tego przedmiotu</div>';
+                return;
+            }
+            
+            material.forEach((item, index) => {
+                const materialItem = document.createElement('div');
+                materialItem.className = `material-item ${item.completed ? 'completed' : ''}`;
+                
+                materialItem.innerHTML = `
+                    <div class="material-info">
+                        <div class="material-topic">${item.topic}</div>
+                        ${item.date ? `<div class="material-date">Zrealizowano: ${formatDisplayDate(item.date)}</div>` : ''}
+                    </div>
+                    <div class="material-actions">
+                        <button class="btn btn-success small-btn complete-material" data-subject="${subject}" data-index="${index}">✓</button>
+                        <button class="btn btn-danger small-btn delete-material" data-subject="${subject}" data-index="${index}">🗑</button>
+                    </div>
+                `;
+                
+                materialList.appendChild(materialItem);
+            });
+            
+            document.querySelectorAll('.complete-material').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const subject = this.getAttribute('data-subject');
+                    const index = parseInt(this.getAttribute('data-index'));
+                    completeMaterial(subject, index);
+                });
+            });
+            
+            document.querySelectorAll('.delete-material').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const subject = this.getAttribute('data-subject');
+                    const index = parseInt(this.getAttribute('data-index'));
+                    deleteMaterial(subject, index);
+                });
+            });
+        }
+
+        function showMaterialForm() {
+            const subject = document.getElementById('material-subject').value;
+            
+            if (!subject) {
+                alert('Wybierz przedmiot najpierw');
+                return;
+            }
+            
+            const modal = document.getElementById('material-modal');
+            const title = document.getElementById('material-modal-title');
+            const body = document.getElementById('material-modal-body');
+            
+            title.textContent = 'Dodaj Tematy';
+            
+            body.innerHTML = `
+                <div class="form-group">
+                    <label for="material-topics">Tematy (jeden na linijkę):</label>
+                    <textarea id="material-topics" class="material-topics-input" placeholder="Wpisz tematy, każdy w nowej linii:&#10;Temat 1&#10;Temat 2&#10;Temat 3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" id="cancel-material">Anuluj</button>
+                    <button class="btn btn-primary" id="save-material">Dodaj Tematy</button>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            
+            document.getElementById('cancel-material').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            document.getElementById('save-material').addEventListener('click', () => {
+                saveMaterial(subject);
+            });
+        }
+
+        function saveMaterial(subject) {
+            const topicsText = document.getElementById('material-topics').value;
+            
+            if (!topicsText) {
+                alert('Proszę wpisać tematy');
+                return;
+            }
+            
+            const topics = topicsText.split('\n')
+                .map(topic => topic.trim())
+                .filter(topic => topic.length > 0);
+            
+            if (topics.length === 0) {
+                alert('Nie znaleziono poprawnych tematów');
+                return;
+            }
+            
+            if (!appData.material[subject]) {
+                appData.material[subject] = [];
+            }
+            
+            topics.forEach(topic => {
+                appData.material[subject].push({
+                    topic: topic,
+                    completed: false,
+                    date: null
+                });
+            });
+            
+            saveData();
+            loadMaterial();
+            document.getElementById('material-modal').style.display = 'none';
+            alert(`Dodano ${topics.length} tematów`);
+        }
+
+        function completeMaterial(subject, index) {
+            if (appData.material[subject] && appData.material[subject][index]) {
+                appData.material[subject][index].completed = true;
+                appData.material[subject][index].date = new Date().toISOString().split('T')[0];
+                saveData();
+                loadMaterial();
+            }
+        }
+
+        function deleteMaterial(subject, index) {
+            if (confirm('Czy na pewno chcesz usunąć ten temat?')) {
+                appData.material[subject].splice(index, 1);
+                saveData();
+                loadMaterial();
+            }
+        }
+
+        // Event management functions
+        function loadUpcomingEvents() {
+            const upcomingList = document.getElementById('upcoming-events-list');
+            upcomingList.innerHTML = '';
+            
+            const today = new Date();
+            const nextWeek = new Date(today);
+            nextWeek.setDate(today.getDate() + 7);
+            
+            const upcomingEvents = appData.events.filter(event => {
+                const eventDate = new Date(event.date);
+                return eventDate >= today && eventDate <= nextWeek;
+            });
+            
+            if (upcomingEvents.length === 0) {
+                upcomingList.innerHTML = '<div class="event-card">Brak nadchodzących wydarzeń</div>';
+                return;
+            }
+            
+            upcomingEvents.forEach(event => {
+                const categoryObj = appData.categories.find(c => c.name === event.category);
+                const color = categoryObj ? categoryObj.color : '#3498db';
+                
+                const eventCard = document.createElement('div');
+                eventCard.className = 'event-card';
+                eventCard.style.borderLeftColor = color;
+                
+                eventCard.innerHTML = `
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-date">${formatDisplayDate(event.date)}</div>
+                    <div class="event-description">${event.description}</div>
+                `;
+                
+                upcomingList.appendChild(eventCard);
+            });
+        }
+
+        // Nowe funkcje do zarządzania wydarzeniami
+        function showEventForm() {
+            const modal = document.getElementById('event-modal');
+            const title = document.getElementById('event-modal-title');
+            const body = document.getElementById('event-modal-body');
+            
+            title.textContent = 'Dodaj Wydarzenie';
+            
+            body.innerHTML = `
+                <div class="form-group">
+                    <label for="event-subject">Przedmiot:</label>
+                    <select id="event-subject" required>
+                        <option value="">-- Wybierz przedmiot --</option>
+                        ${appData.subjects.map(s => `<option value="${s}">${s}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="event-category">Wybór kategorii:</label>
+                    <select id="event-category" required>
+                        <option value="">-- Wybierz kategorię --</option>
+                        ${appData.categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="event-entry-date">Data wpisania:</label>
+                    <input type="date" id="event-entry-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-date">Data wydarzenia:</label>
+                    <input type="date" id="event-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-description">Opis:</label>
+                    <textarea id="event-description" rows="3" placeholder="Opis wydarzenia"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="event-lesson">Lekcja (opcjonalnie):</label>
+                    <select id="event-lesson">
+                        <option value="">-- Nie przypisuj do lekcji --</option>
+                        ${Array.from({length: 10}, (_, i) => i + 1).map(h => `<option value="${h}">Lekcja ${h}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" id="cancel-event">Anuluj</button>
+                    <button class="btn btn-primary" id="save-event">Dodaj</button>
+                </div>
+            `;
+            
+            // Ustaw domyślną datę wpisania na dzisiejszą
+            document.getElementById('event-entry-date').value = new Date().toISOString().split('T')[0];
+            
+            modal.style.display = 'flex';
+            
+            document.getElementById('cancel-event').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            document.getElementById('save-event').addEventListener('click', saveEvent);
+        }
+
+        function saveEvent() {
+            const subject = document.getElementById('event-subject').value;
+            const category = document.getElementById('event-category').value;
+            const entryDate = document.getElementById('event-entry-date').value;
+            const eventDate = document.getElementById('event-date').value;
+            const description = document.getElementById('event-description').value;
+            const lesson = document.getElementById('event-lesson').value;
+            
+            if (!subject || !category || !eventDate) {
+                alert('Proszę wypełnić wymagane pola');
+                return;
+            }
+            
+            const newEvent = {
+                id: Date.now().toString(),
+                subject: subject,
+                category: category,
+                entryDate: entryDate,
+                date: eventDate,
+                description: description,
+                lesson: lesson || null,
+                title: `${subject} - ${category}`
+            };
+            
+            appData.events.push(newEvent);
+            saveData();
+            generateWeeklyCalendar();
+            loadUpcomingEvents();
+            document.getElementById('event-modal').style.display = 'none';
+            alert('Wydarzenie zostało dodane');
+        }
+
+        function showEventDetails(eventId) {
+            const event = appData.events.find(e => e.id === eventId);
+            if (!event) return;
+            
+            const modal = document.getElementById('event-details-modal');
+            const title = document.getElementById('event-details-modal-title');
+            const body = document.getElementById('event-details-modal-body');
+            
+            title.textContent = 'Szczegóły Wydarzenia';
+            
+            const categoryObj = appData.categories.find(c => c.name === event.category);
+            const color = categoryObj ? categoryObj.color : '#3498db';
+            
+            body.innerHTML = `
+                <div class="grade-details">
+                    <p><strong>Tytuł:</strong> ${event.title}</p>
+                    <p><strong>Przedmiot:</strong> ${event.subject}</p>
+                    <p><strong>Kategoria:</strong> <span style="color: ${color}">${event.category}</span></p>
+                    <p><strong>Data wpisania:</strong> ${formatDisplayDate(event.entryDate)}</p>
+                    <p><strong>Data wydarzenia:</strong> ${formatDisplayDate(event.date)}</p>
+                    ${event.lesson ? `<p><strong>Lekcja:</strong> ${event.lesson}</p>` : ''}
+                    <p><strong>Opis:</strong> ${event.description || 'Brak opisu'}</p>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-danger" id="delete-event">Usuń</button>
+                    <button class="btn btn-secondary" id="close-event-details">Zamknij</button>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            
+            document.getElementById('close-event-details').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            document.getElementById('delete-event').addEventListener('click', () => {
+                if (confirm('Czy na pewno chcesz usunąć to wydarzenie?')) {
+                    appData.events = appData.events.filter(e => e.id !== eventId);
+                    saveData();
+                    generateWeeklyCalendar();
+                    loadUpcomingEvents();
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Admin functions
+        function loadAdminData() {
+            loadSubjectsForAdmin();
+            loadStudents();
+            loadCategories();
+        }
+
+        function loadSubjectsForAdmin() {
+            const subjectList = document.getElementById('subject-list');
+            
+            subjectList.innerHTML = '';
+            
+            if (appData.subjects.length === 0) {
+                subjectList.innerHTML = '<div class="class-item">Brak przedmiotów</div>';
+                return;
+            }
+            
+            appData.subjects.forEach((subject, index) => {
+                const subjectItem = document.createElement('div');
+                subjectItem.className = 'class-item';
+                
+                subjectItem.innerHTML = `
+                    <div>
+                        <strong>${subject}</strong>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-danger small-btn delete-subject" data-index="${index}">Usuń</button>
+                    </div>
+                `;
+                
+                subjectList.appendChild(subjectItem);
+            });
+            
+            document.querySelectorAll('.delete-subject').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    deleteSubject(index);
+                });
+            });
+        }
+
+        function loadStudents() {
+            const studentList = document.getElementById('student-list');
+            
+            studentList.innerHTML = '';
+            
+            if (appData.students.length === 0) {
+                studentList.innerHTML = '<div class="student-item">Brak uczniów w klasie</div>';
+                return;
+            }
+            
+            appData.students.forEach((student, index) => {
+                const studentItem = document.createElement('div');
+                studentItem.className = 'student-item';
+                
+                studentItem.innerHTML = `
+                    <div>${student}</div>
+                    <div class="item-actions">
+                        <button class="btn btn-danger small-btn delete-student" data-index="${index}">Usuń</button>
+                    </div>
+                `;
+                
+                studentList.appendChild(studentItem);
+            });
+            
+            document.querySelectorAll('.delete-student').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    deleteStudent(index);
+                });
+            });
+        }
+
+        function loadCategories() {
+            const categoryList = document.getElementById('category-list');
+            
+            categoryList.innerHTML = '';
+            
+            if (appData.categories.length === 0) {
+                categoryList.innerHTML = '<div class="category-item">Brak kategorii</div>';
+                return;
+            }
+            
+            appData.categories.forEach((category, index) => {
+                const categoryItem = document.createElement('div');
+                categoryItem.className = 'category-item';
+                
+                categoryItem.innerHTML = `
+                    <div>
+                        <strong>${category.name}</strong>
+                        <div style="display: inline-block; width: 20px; height: 20px; background: ${category.color}; margin-left: 10px; border: 1px solid #ddd;"></div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-danger small-btn delete-category" data-index="${index}">Usuń</button>
+                    </div>
+                `;
+                
+                categoryList.appendChild(categoryItem);
+            });
+            
+            document.querySelectorAll('.delete-category').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    deleteCategory(index);
+                });
+            });
+        }
+
+        function addSubject() {
+            const name = document.getElementById('new-subject-name').value;
+            
+            if (!name) {
+                alert('Proszę wpisać nazwę przedmiotu');
+                return;
+            }
+            
+            if (appData.subjects.includes(name)) {
+                alert('Przedmiot o tej nazwie już istnieje');
+                return;
+            }
+            
+            appData.subjects.push(name);
+            
+            saveData();
+            loadSubjectsForAdmin();
+            loadSubjects();
+            document.getElementById('new-subject-name').value = '';
+        }
+
+        function addStudents() {
+            const namesText = document.getElementById('student-names').value;
+            
+            if (!namesText) {
+                alert('Wpisz listę uczniów');
+                return;
+            }
+            
+            const names = namesText.split('\n')
+                .map(name => name.trim())
+                .filter(name => name.length > 0);
+            
+            if (names.length === 0) {
+                alert('Nie znaleziono poprawnych nazw uczniów');
+                return;
+            }
+            
+            let addedCount = 0;
+            names.forEach(name => {
+                if (!appData.students.includes(name)) {
+                    appData.students.push(name);
+                    addedCount++;
+                }
+            });
+            
+            saveData();
+            loadStudents();
+            document.getElementById('student-names').value = '';
+            
+            alert(`Dodano ${addedCount} uczniów do klasy`);
+        }
+
+        function addCategory() {
+            const name = document.getElementById('new-category-name').value;
+            const color = document.getElementById('category-color').value;
+            
+            if (!name) {
+                alert('Proszę wpisać nazwę kategorii');
+                return;
+            }
+            
+            if (appData.categories.some(c => c.name === name)) {
+                alert('Kategoria o tej nazwie już istnieje');
+                return;
+            }
+            
+            appData.categories.push({
+                name: name,
+                color: color
+            });
+            
+            saveData();
+            loadCategories();
+            loadSubjects();
+            document.getElementById('new-category-name').value = '';
+        }
+
+        function deleteSubject(index) {
+            const subject = appData.subjects[index];
+            
+            if (confirm(`Czy na pewno chcesz usunąć przedmiot ${subject}?`)) {
+                appData.subjects.splice(index, 1);
+                delete appData.grades[subject];
+                delete appData.material[subject];
+                
+                saveData();
+                loadSubjectsForAdmin();
+                loadSubjects();
+            }
+        }
+
+        function deleteStudent(index) {
+            const student = appData.students[index];
+            
+            if (confirm(`Czy na pewno chcesz usunąć ucznia ${student}?`)) {
+                appData.students.splice(index, 1);
+                
+                // Usuń oceny tego ucznia ze wszystkich przedmiotów
+                Object.keys(appData.grades).forEach(subject => {
+                    delete appData.grades[subject][student];
+                });
+                
+                saveData();
+                loadStudents();
+            }
+        }
+
+        function deleteCategory(index) {
+            const category = appData.categories[index];
+            
+            if (confirm(`Czy na pewno chcesz usunąć kategorię ${category.name}?`)) {
+                appData.categories.splice(index, 1);
+                
+                // Usuń kategorię ze wszystkich ocen
+                Object.keys(appData.grades).forEach(subject => {
+                    Object.keys(appData.grades[subject]).forEach(student => {
+                        ['1', '2'].forEach(semester => {
+                            appData.grades[subject][student][semester] = appData.grades[subject][student][semester]
+                                .filter(grade => grade && grade.category !== category.name);
+                        });
+                    });
+                });
+                
+                saveData();
+                loadCategories();
+            }
+        }
+
+        function loadSubjects() {
+            const subjectSelects = [
+                'material-subject', 'grade-subject', 'schedule-subject', 'event-subject', 'substitution-subject'
+            ];
+            
+            subjectSelects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (select) {
+                    select.innerHTML = '<option value="">-- Wybierz przedmiot --</option>';
+                    select.innerHTML += appData.subjects.map(s => 
+                        `<option value="${s}">${s}</option>`
+                    ).join('');
+                }
+            });
+            
+            const gradeCategorySelect = document.getElementById('grade-category');
+            if (gradeCategorySelect) {
+                gradeCategorySelect.innerHTML = '<option value="all">Wszystkie kategorie</option>';
+                gradeCategorySelect.innerHTML += appData.categories.map(c => 
+                    `<option value="${c.name}">${c.name}</option>`
+                ).join('');
+            }
+        }
+
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function formatDisplayDate(dateString) {
+            const [year, month, day] = dateString.split('-');
+            const date = new Date(year, month - 1, day);
+            return date.toLocaleDateString('pl-PL');
+        }
+
+        function saveData() {
+            localStorage.setItem('classDiary', JSON.stringify(appData));
+        }
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
