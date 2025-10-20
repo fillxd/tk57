@@ -26,7 +26,6 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Header Styles */
         header {
             background: linear-gradient(135deg, #2c3e50, #3498db);
             color: white;
@@ -72,7 +71,6 @@
             background-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* Main Content */
         .main-content {
             padding: 20px;
         }
@@ -150,7 +148,6 @@
             background-color: #7f8c8d;
         }
 
-        /* Calendar Styles */
         .calendar-navigation {
             display: flex;
             justify-content: space-between;
@@ -196,7 +193,6 @@
             width: 60px;
         }
 
-        /* Lesson type colors */
         .lesson-normal { background-color: #e3f2fd; }
         .lesson-substitution { background-color: #fff3e0; }
         .lesson-exam { background-color: #ffebee; }
@@ -250,7 +246,6 @@
             justify-content: center;
         }
 
-        /* Grade Table Styles */
         .grade-controls {
             display: flex;
             gap: 15px;
@@ -318,7 +313,6 @@
             background-color: #f8f9fa;
         }
 
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -385,16 +379,6 @@
             margin-top: 20px;
         }
 
-        .date-range {
-            display: flex;
-            gap: 10px;
-        }
-
-        .date-range input {
-            flex: 1;
-        }
-
-        /* Material Plan Styles */
         .material-controls {
             display: flex;
             gap: 15px;
@@ -447,7 +431,6 @@
             gap: 10px;
         }
 
-        /* Event List Styles */
         .event-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -461,18 +444,6 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             padding: 15px;
             border-left: 4px solid #3498db;
-        }
-
-        .event-card.exam {
-            border-left-color: #e74c3c;
-        }
-
-        .event-card.quiz {
-            border-left-color: #9b59b6;
-        }
-
-        .event-card.homework {
-            border-left-color: #f39c12;
         }
 
         .event-title {
@@ -490,7 +461,6 @@
             color: #555;
         }
 
-        /* Admin Panel Styles */
         .admin-panel {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -539,24 +509,14 @@
             font-size: 12px;
         }
 
-        /* Utility Classes */
         .hidden {
             display: none !important;
-        }
-
-        .text-center {
-            text-align: center;
         }
 
         .mt-20 {
             margin-top: 20px;
         }
 
-        .mb-20 {
-            margin-bottom: 20px;
-        }
-
-        /* Grade entry styles */
         .grade-entry-form {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -584,7 +544,6 @@
             border-bottom: none;
         }
 
-        /* Color picker */
         .color-picker {
             width: 100%;
             height: 40px;
@@ -593,7 +552,6 @@
             cursor: pointer;
         }
 
-        /* Schedule table */
         .schedule-table {
             width: 100%;
             border-collapse: collapse;
@@ -633,7 +591,6 @@
             opacity: 0.8;
         }
 
-        /* Material topics input */
         .material-topics-input {
             width: 100%;
             height: 150px;
@@ -644,7 +601,6 @@
             resize: vertical;
         }
 
-        /* Grade details */
         .grade-details {
             background-color: #f8f9fa;
             padding: 15px;
@@ -656,7 +612,6 @@
             margin-bottom: 8px;
         }
 
-        /* Lesson details */
         .lesson-details-section {
             margin-bottom: 20px;
             padding: 15px;
@@ -719,7 +674,6 @@
             font-weight: bold;
         }
 
-        /* Event item styles */
         .event-item {
             background-color: #e8f4fd;
             border-left: 4px solid #3498db;
@@ -740,11 +694,6 @@
             margin-bottom: 2px;
         }
 
-        .event-item-class {
-            font-size: 10px;
-            color: #7f8c8d;
-        }
-
         .add-event-btn-container {
             margin-bottom: 20px;
             text-align: right;
@@ -761,17 +710,18 @@
             display: flex;
             flex-direction: column;
         }
+
         .menu a {
             color: white;
             text-decoration: none;
             margin-bottom: 8px;
             font-family: Arial, sans-serif;
         }
+
         .menu a:hover {
             text-decoration: underline;
         }
         
-        /* Nowe style dla dziennika klasy */
         .class-info {
             background: linear-gradient(135deg, #27ae60, #2ecc71);
             color: white;
@@ -791,22 +741,59 @@
             margin-bottom: 0;
             font-weight: bold;
         }
-        
-        .student-grades-view {
-            margin-top: 20px;
+
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            font-size: 24px;
+            color: #3498db;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
-<div class="menu">
-    <a href="https://fillxd.github.io/sz57">Syst</a>
-    <a href="https://fillxd.github.io/tm57">TM</a>
-    <a href="https://fillxd.github.io/pl57">Plan</a>
+    <div id="loader" class="loader">
+        <div>Ładowanie danych...</div>
+    </div>
+
+    <div class="menu">
+        <a href="https://fillxd.github.io/sz57">Syst</a>
+        <a href="https://fillxd.github.io/tm57">TM</a>
+        <a href="https://fillxd.github.io/pl57">Plan</a>
         <a href="https://fillxd.github.io/na57">MG</a>
-    <a href="https://fillxd.github.io/tk57">D5b</a>
-    <a href="https://fillxd.github.io/kl57">T5b</a>
- <a href="https://docs.google.com/spreadsheets/d/18OV9Sar_ENFseGPn8wppwrIeJXm6j4dsa890OTg6Ioo/edit?gid=1302175797#gid=1302175797">ARK</a>
-</div>
+        <a href="https://fillxd.github.io/tk57">D5b</a>
+        <a href="https://fillxd.github.io/kl57">T5b</a>
+        <a href="https://docs.google.com/spreadsheets/d/18OV9Sar_ENFseGPn8wppwrIeJXm6j4dsa890OTg6Ioo/edit?gid=1302175797#gid=1302175797">ARK</a>
+    </div>
 
     <div class="container">
         <header>
@@ -823,7 +810,6 @@
         </header>
 
         <div class="main-content">
-            <!-- Home Section -->
             <section id="home" class="section active">
                 <div class="section-header">
                     <h2 class="section-title">Strona Główna - Terminarz Tygodniowy</h2>
@@ -848,9 +834,7 @@
                 
                 <div class="upcoming-events">
                     <h3>Nadchodzące wydarzenia</h3>
-                    <div id="upcoming-events-list" class="event-list">
-                        <!-- Events will be loaded here -->
-                    </div>
+                    <div id="upcoming-events-list" class="event-list"></div>
                 </div>
                 
                 <div class="calendar-container">
@@ -865,14 +849,11 @@
                                 <th>Piątek</th>
                             </tr>
                         </thead>
-                        <tbody id="calendar-body">
-                            <!-- Calendar will be generated here -->
-                        </tbody>
+                        <tbody id="calendar-body"></tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Schedule Section -->
             <section id="schedule" class="section">
                 <div class="section-header">
                     <h2 class="section-title">Plan Standardowy</h2>
@@ -894,14 +875,11 @@
                                 <th>Piątek</th>
                             </tr>
                         </thead>
-                        <tbody id="schedule-body">
-                            <!-- Schedule will be generated here -->
-                        </tbody>
+                        <tbody id="schedule-body"></tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Material Section -->
             <section id="material" class="section">
                 <div class="section-header">
                     <h2 class="section-title">Rozkład Materiału</h2>
@@ -921,12 +899,9 @@
                     </select>
                 </div>
                 
-                <div class="material-list" id="material-list">
-                    <!-- Material will be loaded here -->
-                </div>
+                <div class="material-list" id="material-list"></div>
             </section>
 
-            <!-- Grades Section -->
             <section id="grades" class="section">
                 <div class="section-header">
                     <h2 class="section-title">System Oceniania</h2>
@@ -966,22 +941,17 @@
                                 <th rowspan="2">Średnia Roczna</th>
                             </tr>
                             <tr>
-                                <!-- Semester I columns -->
                                 <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
                                 <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>Śr I</th>
-                                <!-- Semester II columns -->
                                 <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
                                 <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>Śr II</th>
                             </tr>
                         </thead>
-                        <tbody id="grade-table-body">
-                            <!-- Grades will be loaded here -->
-                        </tbody>
+                        <tbody id="grade-table-body"></tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Admin Section -->
             <section id="admin" class="section">
                 <div class="section-header">
                     <h2 class="section-title">Panel Administratora</h2>
@@ -998,9 +968,7 @@
                             <input type="text" id="new-subject-name" placeholder="Nazwa przedmiotu">
                             <button class="btn btn-primary mt-20" id="add-subject">Dodaj Przedmiot</button>
                         </div>
-                        <div class="class-list" id="subject-list">
-                            <!-- Subjects will be listed here -->
-                        </div>
+                        <div class="class-list" id="subject-list"></div>
                     </div>
                     
                     <div class="admin-card">
@@ -1009,9 +977,7 @@
                             <textarea id="student-names" placeholder="Wpisz uczniów (jeden na linijkę):&#10;Jan Kowalski&#10;Anna Nowak" rows="5"></textarea>
                             <button class="btn btn-primary mt-20" id="add-students">Dodaj Uczniów</button>
                         </div>
-                        <div class="student-list" id="student-list">
-                            <!-- Students will be listed here -->
-                        </div>
+                        <div class="student-list" id="student-list"></div>
                     </div>
                     
                     <div class="admin-card">
@@ -1022,25 +988,20 @@
                             <input type="color" id="category-color" value="#3498db" class="color-picker">
                             <button class="btn btn-primary mt-20" id="add-category">Dodaj Kategorię</button>
                         </div>
-                        <div class="category-list" id="category-list">
-                            <!-- Categories will be listed here -->
-                        </div>
+                        <div class="category-list" id="category-list"></div>
                     </div>
                 </div>
             </section>
         </div>
     </div>
 
-    <!-- Modals -->
     <div class="modal" id="lesson-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="lesson-modal-title">Szczegóły Lekcji</h2>
                 <button class="close-button" id="close-lesson-modal">&times;</button>
             </div>
-            <div id="lesson-modal-body">
-                <!-- Content will be dynamically filled -->
-            </div>
+            <div id="lesson-modal-body"></div>
         </div>
     </div>
 
@@ -1050,9 +1011,7 @@
                 <h2 id="lesson-details-modal-title">Realizacja Lekcji</h2>
                 <button class="close-button" id="close-lesson-details-modal">&times;</button>
             </div>
-            <div id="lesson-details-modal-body">
-                <!-- Content will be dynamically filled -->
-            </div>
+            <div id="lesson-details-modal-body"></div>
         </div>
     </div>
 
@@ -1062,9 +1021,7 @@
                 <h2 id="schedule-modal-title">Dodaj Lekcję do Planu</h2>
                 <button class="close-button" id="close-schedule-modal">&times;</button>
             </div>
-            <div id="schedule-modal-body">
-                <!-- Content will be dynamically filled -->
-            </div>
+            <div id="schedule-modal-body"></div>
         </div>
     </div>
 
@@ -1074,9 +1031,7 @@
                 <h2 id="grade-modal-title">Dodaj Ocenę</h2>
                 <button class="close-button" id="close-grade-modal">&times;</button>
             </div>
-            <div id="grade-modal-body">
-                <!-- Content will be dynamically filled -->
-            </div>
+            <div id="grade-modal-body"></div>
         </div>
     </div>
 
@@ -1086,9 +1041,7 @@
                 <h2 id="grade-details-modal-title">Szczegóły Oceny</h2>
                 <button class="close-button" id="close-grade-details-modal">&times;</button>
             </div>
-            <div id="grade-details-modal-body">
-                <!-- Content will be dynamically filled -->
-            </div>
+            <div id="grade-details-modal-body"></div>
         </div>
     </div>
 
@@ -1098,22 +1051,17 @@
                 <h2 id="material-modal-title">Dodaj Tematy</h2>
                 <button class="close-button" id="close-material-modal">&times;</button>
             </div>
-            <div id="material-modal-body">
-                <!-- Content will be dynamically filled -->
-            </div>
+            <div id="material-modal-body"></div>
         </div>
     </div>
 
-    <!-- Nowy modal dla wydarzeń -->
     <div class="modal" id="event-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="event-modal-title">Dodaj Wydarzenie</h2>
                 <button class="close-button" id="close-event-modal">&times;</button>
             </div>
-            <div id="event-modal-body">
-                <!-- Content will be dynamically filled -->
-            </div>
+            <div id="event-modal-body"></div>
         </div>
     </div>
 
@@ -1123,68 +1071,73 @@
                 <h2 id="event-details-modal-title">Szczegóły Wydarzenia</h2>
                 <button class="close-button" id="close-event-details-modal">&times;</button>
             </div>
-            <div id="event-details-modal-body">
-                <!-- Content will be dynamically filled -->
-            </div>
+            <div id="event-details-modal-body"></div>
         </div>
     </div>
 
-    <!-- Modal dla zastępstw -->
     <div class="modal" id="substitution-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="substitution-modal-title">Dodaj Zastępstwo</h2>
                 <button class="close-button" id="close-substitution-modal">&times;</button>
             </div>
-            <div id="substitution-modal-body">
-                <!-- Content will be dynamically filled -->
-            </div>
+            <div id="substitution-modal-body"></div>
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
     <script>
-        // Data storage and initialization
+        const firebaseConfig = {
+            apiKey: "AIzaSyDrpLz8V_gfJlwAlLCY2BGEwkwraQ7wdH8",
+            authDomain: "fslov-c8077.firebaseapp.com",
+            databaseURL: "https://fslov-c8077-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "fslov-c8077",
+            storageBucket: "fslov-c8077.firebasestorage.app",
+            messagingSenderId: "716688990498",
+            appId: "1:716688990498:web:b819258bf3e379a5c6057b",
+            measurementId: "G-7R291WZ36K"
+        };
+
+        let database, dbRef;
+        
+        try {
+            firebase.initializeApp(firebaseConfig);
+            database = firebase.database();
+            dbRef = database.ref('classDiary');
+            console.log('✅ Firebase zainicjalizowany poprawnie');
+        } catch (error) {
+            console.error('❌ Błąd inicjalizacji Firebase:', error);
+        }
+
         const SCHOOL_YEAR = {
             start: '2025-09-01',
             end: '2026-06-26'
         };
 
         const GRADE_VALUES = {
-    // Oceny Z WAGĄ
-    '1': 1.0, '1+': 1.5, '2-': 1.75, '2': 2.0, '2+': 2.5,
-    '3-': 2.75, '3': 3.0, '3+': 3.5, '4-': 3.75, '4': 4.0,
-    '4+': 4.5, '5-': 4.75, '5': 5.0, '5+': 5.5, '6-': 5.75, '6': 6.0,
-    
-    // Oceny BEZ WAGI - z kropką
-    '.1': null, '.1+': null, '.2-': null, '.2': null, '.2+': null,
-    '.3-': null, '.3': null, '.3+': null, '.4-': null, '.4': null,
-    '.4+': null, '.5-': null, '.5': null, '.5+': null, '.6-': null, '.6': null,
-    
-    // Inne oceny bez wagi
-    'np': null, 'nb': null, 'zw': null, '+': null, '-': null
-};
+            '1': 1.0, '1+': 1.5, '2-': 1.75, '2': 2.0, '2+': 2.5,
+            '3-': 2.75, '3': 3.0, '3+': 3.5, '4-': 3.75, '4': 4.0,
+            '4+': 4.5, '5-': 4.75, '5': 5.0, '5+': 5.5, '6-': 5.75, '6': 6.0,
+            '.1': null, '.1+': null, '.2-': null, '.2': null, '.2+': null,
+            '.3-': null, '.3': null, '.3+': null, '.4-': null, '.4': null,
+            '.4+': null, '.5-': null, '.5': null, '.5+': null, '.6-': null, '.6': null,
+            'np': null, 'nb': null, 'zw': null, '+': null, '-': null
+        };
 
-const GRADE_OPTIONS = [
-    // Oceny Z WAGĄ
-    '1', '1+', '2-', '2', '2+', '3-', '3', '3+', '4-', '4', '4+', '5-', '5', '5+', '6-', '6',
-    
-    // Oceny BEZ WAGI - z kropką
-    '.1', '.1+', '.2-', '.2', '.2+', '.3-', '.3', '.3+', '.4-', '.4', '.4+', '.5-', '.5', '.5+', '.6-', '.6',
-    
-    // Inne oceny bez wagi
-    'np', 'nb', 'zw', '+', '-'
-];
+        const GRADE_OPTIONS = [
+            '1', '1+', '2-', '2', '2+', '3-', '3', '3+', '4-', '4', '4+', '5-', '5', '5+', '6-', '6',
+            '.1', '.1+', '.2-', '.2', '.2+', '.3-', '.3', '.3+', '.4-', '.4', '.4+', '.5-', '.5', '.5+', '.6-', '.6',
+            'np', 'nb', 'zw', '+', '-'
+        ];
 
-        // Initialize data structures
-        let appData = JSON.parse(localStorage.getItem('classDiary')) || {
+        let appData = {
             className: "5B",
             classTeacher: "Mateusz Gig",
             subjects: ["Matematyka", "Język polski", "Historia", "Geografia", "Biologia", "Fizyka", "Chemia", "Język angielski"],
             students: [],
-            schedule: {
-                standard: {},
-                actual: {}
-            },
+            schedule: { standard: {}, actual: {} },
             material: {},
             grades: {},
             events: [],
@@ -1197,13 +1150,116 @@ const GRADE_OPTIONS = [
             ]
         };
 
-        // Current state
-        let currentWeek = getCurrentWeek();
+        let currentWeek;
         let currentEditingCell = null;
         let currentSubstitutionData = null;
 
-        // Initialize the application
-        function initApp() {
+        async function migrateFromLocalStorage(firebaseData) {
+            try {
+                if (firebaseData && firebaseData.className) {
+                    console.log('ℹ️ Firebase już ma dane, pomijam migrację');
+                    return null;
+                }
+                
+                const localData = localStorage.getItem('classDiary');
+                
+                if (localData) {
+                    console.log('🔄 Migracja z localStorage...');
+                    const parsedData = JSON.parse(localData);
+                    await dbRef.set(parsedData);
+                    console.log('✅ Migracja zakończona');
+                    alert('✅ Dane przeniesione do Firebase!');
+                    return parsedData;
+                }
+                return null;
+            } catch (error) {
+                console.error('❌ Błąd migracji:', error);
+                return null;
+            }
+        }
+
+        async function loadDataFromFirebase() {
+            try {
+                console.log('⏳ Ładowanie danych...');
+                const snapshot = await dbRef.once('value');
+                const data = snapshot.val();
+                
+                const migratedData = await migrateFromLocalStorage(data);
+                
+                if (data && data.className) {
+                    appData = data;
+                } else if (migratedData) {
+                    appData = migratedData;
+                } else {
+                    await saveData();
+                }
+                
+                if (!appData.schedule) appData.schedule = { standard: {}, actual: {} };
+                if (!appData.schedule.standard) appData.schedule.standard = {};
+                if (!appData.schedule.actual) appData.schedule.actual = {};
+                if (!appData.students) appData.students = [];
+                if (!appData.grades) appData.grades = {};
+                if (!appData.material) appData.material = {};
+                if (!appData.events) appData.events = [];
+                if (!appData.subjects) appData.subjects = ["Matematyka"];
+                if (!appData.categories) appData.categories = [
+                    { name: 'Odpowiedź ustna', color: '#3498db' }
+                ];
+                
+                document.getElementById('loader').style.display = 'none';
+                
+            } catch (error) {
+                console.error('❌ Błąd:', error);
+                if (error.code === 'PERMISSION_DENIED') {
+                    alert('BŁĄD: Brak uprawnień! Ustaw reguły w Firebase.');
+                }
+                document.getElementById('loader').style.display = 'none';
+            }
+        }
+
+        async function saveData() {
+            try {
+                await dbRef.set(appData);
+                console.log('✅ Zapisano');
+                showNotification('Zapisano!');
+            } catch (error) {
+                console.error('❌ Błąd zapisu:', error);
+                alert('Błąd zapisu: ' + error.message);
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed; top: 20px; right: 20px;
+                background: #27ae60; color: white;
+                padding: 15px 20px; border-radius: 5px;
+                z-index: 10000; animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 2000);
+        }
+
+        function getCurrentWeek() {
+            const today = new Date();
+            const start = new Date(today);
+            start.setHours(12, 0, 0, 0);
+            const day = start.getDay();
+            const diff = start.getDate() - day + (day === 0 ? -6 : 1);
+            start.setDate(diff);
+            const end = new Date(start);
+            end.setDate(start.getDate() + 4);
+            return { start, end };
+        }
+
+        async function initApp() {
+            currentWeek = getCurrentWeek();
+            await loadDataFromFirebase();
             setupEventListeners();
             loadInitialData();
             showSection('home');
@@ -1212,17 +1268,11 @@ const GRADE_OPTIONS = [
             updateClassInfo();
         }
 
-        // Setup event listeners
         function setupEventListeners() {
-            // Tab navigation
             document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabName = tab.getAttribute('data-tab');
-                    showSection(tabName);
-                });
+                tab.addEventListener('click', () => showSection(tab.getAttribute('data-tab')));
             });
 
-            // Week navigation
             document.getElementById('prev-week').addEventListener('click', () => {
                 currentWeek.start.setDate(currentWeek.start.getDate() - 7);
                 currentWeek.end.setDate(currentWeek.end.getDate() - 7);
@@ -1237,73 +1287,54 @@ const GRADE_OPTIONS = [
                 loadUpcomingEvents();
             });
 
-            // Modal close buttons
             document.getElementById('close-lesson-modal').addEventListener('click', () => {
                 document.getElementById('lesson-modal').style.display = 'none';
             });
-
             document.getElementById('close-lesson-details-modal').addEventListener('click', () => {
                 document.getElementById('lesson-details-modal').style.display = 'none';
             });
-
             document.getElementById('close-schedule-modal').addEventListener('click', () => {
                 document.getElementById('schedule-modal').style.display = 'none';
             });
-
             document.getElementById('close-grade-modal').addEventListener('click', () => {
                 document.getElementById('grade-modal').style.display = 'none';
             });
-
             document.getElementById('close-grade-details-modal').addEventListener('click', () => {
                 document.getElementById('grade-details-modal').style.display = 'none';
             });
-
             document.getElementById('close-material-modal').addEventListener('click', () => {
                 document.getElementById('material-modal').style.display = 'none';
             });
-
-            // Nowe przyciski dla wydarzeń
             document.getElementById('close-event-modal').addEventListener('click', () => {
                 document.getElementById('event-modal').style.display = 'none';
             });
-
             document.getElementById('close-event-details-modal').addEventListener('click', () => {
                 document.getElementById('event-details-modal').style.display = 'none';
             });
-
-            // Modal dla zastępstw
             document.getElementById('close-substitution-modal').addEventListener('click', () => {
                 document.getElementById('substitution-modal').style.display = 'none';
             });
 
-            // Admin actions
             document.getElementById('add-subject').addEventListener('click', addSubject);
             document.getElementById('add-students').addEventListener('click', addStudents);
             document.getElementById('add-category').addEventListener('click', addCategory);
-
-            // Other actions
             document.getElementById('add-material').addEventListener('click', showMaterialForm);
             document.getElementById('add-grade-bulk').addEventListener('click', showBulkGradeForm);
             document.getElementById('add-grade-single').addEventListener('click', showSingleGradeForm);
-
-            // Dodane: przycisk dodawania wydarzeń
             document.getElementById('add-event-btn').addEventListener('click', showEventForm);
 
-            // Dynamic select changes
             document.getElementById('material-subject').addEventListener('change', loadMaterial);
             document.getElementById('grade-subject').addEventListener('change', loadGrades);
             document.getElementById('grade-semester').addEventListener('change', loadGrades);
             document.getElementById('grade-category').addEventListener('change', loadGrades);
         }
 
-        // Load initial data
         function loadInitialData() {
             loadSubjects();
             loadSchedule();
             loadGrades();
         }
 
-        // Update class info in all sections
         function updateClassInfo() {
             document.querySelectorAll('#current-class-name, #schedule-class-name, #material-class-name, #grades-class-name, #admin-class-name').forEach(el => {
                 el.textContent = appData.className;
@@ -1311,52 +1342,20 @@ const GRADE_OPTIONS = [
             document.getElementById('class-teacher').textContent = appData.classTeacher;
         }
 
-        // Show section function
         function showSection(sectionName) {
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.getElementById(sectionName).classList.add('active');
             document.querySelector(`[data-tab="${sectionName}"]`).classList.add('active');
 
-            if (sectionName === 'grades') {
-                loadGrades();
-            } else if (sectionName === 'material') {
-                loadMaterial();
-            } else if (sectionName === 'admin') {
-                loadAdminData();
-            } else if (sectionName === 'schedule') {
-                loadSchedule();
-            } else if (sectionName === 'home') {
+            if (sectionName === 'grades') loadGrades();
+            else if (sectionName === 'material') loadMaterial();
+            else if (sectionName === 'admin') loadAdminData();
+            else if (sectionName === 'schedule') loadSchedule();
+            else if (sectionName === 'home') {
                 generateWeeklyCalendar();
                 loadUpcomingEvents();
             }
-        }
-
-        function getCurrentWeek() {
-            const today = new Date();
-            const start = new Date(today);
-            
-            // Ustawiamy godzinę na 12:00:00 aby uniknąć problemów ze strefami czasowymi
-            start.setHours(12, 0, 0, 0);
-            
-            // Obliczamy poniedziałek: 
-            // - getDay() zwraca 0 dla niedzieli, 1 dla poniedziałku, ..., 6 dla soboty
-            // - Aby dostać poniedziałek: odejmujemy (dzień tygodnia - 1), 
-            //   ale jeśli to niedziela (0), to odejmujemy -6 żeby dostać poprzedni poniedziałek
-            const day = start.getDay();
-            const diff = start.getDate() - day + (day === 0 ? -6 : 1);
-            
-            start.setDate(diff);
-            
-            const end = new Date(start);
-            end.setDate(start.getDate() + 4);
-            
-            return { start, end };
         }
 
         function generateWeeklyCalendar() {
@@ -1378,11 +1377,6 @@ const GRADE_OPTIONS = [
                     cellDate.setDate(currentWeek.start.getDate() + day);
                     
                     const cell = document.createElement('td');
-                    cell.className = 'lesson-cell';
-                    cell.setAttribute('data-hour', hour);
-                    cell.setAttribute('data-day', day);
-                    cell.setAttribute('data-date', formatDate(cellDate));
-                    
                     const dateKey = formatDate(cellDate);
                     const dayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
                     const dayName = dayNames[day];
@@ -1413,18 +1407,13 @@ const GRADE_OPTIONS = [
                             </div>
                         `;
                         
-                        // Dodaj wydarzenia do komórki
                         if (events.length > 0) {
                             events.forEach(event => {
                                 const eventElement = document.createElement('div');
                                 eventElement.className = 'event-item';
                                 eventElement.setAttribute('data-event-id', event.id);
-                                eventElement.innerHTML = `
-                                    <div class="event-item-title">${event.title}</div>
-                                `;
-                                eventElement.addEventListener('click', () => {
-                                    showEventDetails(event.id);
-                                });
+                                eventElement.innerHTML = `<div class="event-item-title">${event.title}</div>`;
+                                eventElement.addEventListener('click', () => showEventDetails(event.id));
                                 cell.appendChild(eventElement);
                             });
                         }
@@ -1438,18 +1427,13 @@ const GRADE_OPTIONS = [
                             showSubstitutionForm(dateKey, hour);
                         });
                         
-                        // Dodaj wydarzenia do pustej komórki
                         if (events.length > 0) {
                             events.forEach(event => {
                                 const eventElement = document.createElement('div');
                                 eventElement.className = 'event-item';
                                 eventElement.setAttribute('data-event-id', event.id);
-                                eventElement.innerHTML = `
-                                    <div class="event-item-title">${event.title}</div>
-                                `;
-                                eventElement.addEventListener('click', () => {
-                                    showEventDetails(event.id);
-                                });
+                                eventElement.innerHTML = `<div class="event-item-title">${event.title}</div>`;
+                                eventElement.addEventListener('click', () => showEventDetails(event.id));
                                 cell.appendChild(eventElement);
                             });
                         }
@@ -1481,7 +1465,6 @@ const GRADE_OPTIONS = [
             }
         }
 
-        // Schedule functions - SIMPLIFIED VERSION
         function loadSchedule() {
             const scheduleBody = document.getElementById('schedule-body');
             scheduleBody.innerHTML = '';
@@ -1500,17 +1483,10 @@ const GRADE_OPTIONS = [
                     const lesson = appData.schedule.standard[day] && appData.schedule.standard[day][hour];
                     
                     if (lesson) {
-                        cell.innerHTML = `
-                            <div class="schedule-lesson">
-                                <strong>${lesson.subject}</strong>
-                            </div>
-                        `;
+                        cell.innerHTML = `<div class="schedule-lesson"><strong>${lesson.subject}</strong></div>`;
                     }
                     
-                    cell.addEventListener('click', () => {
-                        showScheduleLessonForm(day, hour, lesson);
-                    });
-                    
+                    cell.addEventListener('click', () => showScheduleLessonForm(day, hour, lesson));
                     row.appendChild(cell);
                 });
                 
@@ -1580,17 +1556,13 @@ const GRADE_OPTIONS = [
                 appData.schedule.standard[day] = {};
             }
             
-            appData.schedule.standard[day][hour] = {
-                subject: subject
-            };
+            appData.schedule.standard[day][hour] = { subject: subject };
             
             saveData();
             loadSchedule();
             document.getElementById('schedule-modal').style.display = 'none';
-            alert('Lekcja została dodana do planu standardowego');
         }
 
-        // Lesson details and realization functions
         function showLessonDetails(date, hour, lesson, events) {
             const modal = document.getElementById('lesson-modal');
             const title = document.getElementById('lesson-modal-title');
@@ -1647,7 +1619,6 @@ const GRADE_OPTIONS = [
             `;
             
             body.innerHTML = content;
-            
             modal.style.display = 'flex';
             
             document.getElementById('close-details').addEventListener('click', () => {
@@ -1780,10 +1751,8 @@ const GRADE_OPTIONS = [
             saveData();
             generateWeeklyCalendar();
             document.getElementById('lesson-details-modal').style.display = 'none';
-            alert('Zapisano realizację lekcji');
         }
 
-        // Funkcja do pokazywania formularza zastępstwa
         function showSubstitutionForm(date, hour) {
             currentSubstitutionData = { date, hour };
             const modal = document.getElementById('substitution-modal');
@@ -1803,9 +1772,8 @@ const GRADE_OPTIONS = [
                 <div class="form-group">
                     <label for="substitution-type">Typ zastępstwa:</label>
                     <select id="substitution-type" required>
-                                                                    <option value="">XX</option>
+                        <option value="">Zastępstwo</option>
                         <option value="substitute_for">Zastępuję za kogoś</option>
-
                     </select>
                 </div>
                 <div id="substitute-for-input-container" style="display: none;">
@@ -1871,10 +1839,8 @@ const GRADE_OPTIONS = [
             saveData();
             generateWeeklyCalendar();
             document.getElementById('substitution-modal').style.display = 'none';
-            alert('Zastępstwo zostało dodane');
         }
 
-        // Grade management functions
         function loadGrades() {
             const subject = document.getElementById('grade-subject').value;
             const semester = document.getElementById('grade-semester').value;
@@ -1967,15 +1933,15 @@ const GRADE_OPTIONS = [
         }
 
         function calculateAverage(grades) {
-    const validGrades = grades.filter(g => g && g.grade && GRADE_VALUES[g.grade] !== null);
-    if (validGrades.length === 0) return '-';
-    
-    const sum = validGrades.reduce((total, grade) => {
-        return total + GRADE_VALUES[grade.grade];
-    }, 0);
-    
-    return (sum / validGrades.length).toFixed(2);
-}
+            const validGrades = grades.filter(g => g && g.grade && GRADE_VALUES[g.grade] !== null);
+            if (validGrades.length === 0) return '-';
+            
+            const sum = validGrades.reduce((total, grade) => {
+                return total + GRADE_VALUES[grade.grade];
+            }, 0);
+            
+            return (sum / validGrades.length).toFixed(2);
+        }
 
         function showGradeDetails(student, subject, semester, index) {
             const grade = appData.grades[subject]?.[student]?.[semester]?.[index];
@@ -1994,22 +1960,22 @@ const GRADE_OPTIONS = [
             const color = categoryObj ? categoryObj.color : '#3498db';
             
             body.innerHTML = `
-    <div class="grade-details">
-        <p><strong>Uczeń:</strong> ${student}</p>
-        <p><strong>Przedmiot:</strong> ${subject}</p>
-        <p><strong>Ocena:</strong> ${grade.grade}</p>
-        <p><strong>Kategoria:</strong> <span style="color: ${color}">${grade.category}</span></p>
-        <p><strong>Temat:</strong> ${grade.topic || 'Brak opisu'}</p>
-        <p><strong>Data:</strong> ${formatDisplayDate(grade.date)}</p>
-        <p><strong>Semestr:</strong> ${semester}</p>
-        <p><strong>Liczy się do średniej:</strong> ${GRADE_VALUES[grade.grade] !== null ? 'TAK' : 'NIE'}</p>
-    </div>
-    <div class="form-actions">
-        <button class="btn btn-primary" id="edit-grade-details">Edytuj</button>
-        <button class="btn btn-danger" id="delete-grade-details">Usuń</button>
-        <button class="btn btn-secondary" id="close-grade-details">Zamknij</button>
-    </div>
-`;
+                <div class="grade-details">
+                    <p><strong>Uczeń:</strong> ${student}</p>
+                    <p><strong>Przedmiot:</strong> ${subject}</p>
+                    <p><strong>Ocena:</strong> ${grade.grade}</p>
+                    <p><strong>Kategoria:</strong> <span style="color: ${color}">${grade.category}</span></p>
+                    <p><strong>Temat:</strong> ${grade.topic || 'Brak opisu'}</p>
+                    <p><strong>Data:</strong> ${formatDisplayDate(grade.date)}</p>
+                    <p><strong>Semestr:</strong> ${semester}</p>
+                    <p><strong>Liczy się do średniej:</strong> ${GRADE_VALUES[grade.grade] !== null ? 'TAK' : 'NIE'}</p>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="edit-grade-details">Edytuj</button>
+                    <button class="btn btn-danger" id="delete-grade-details">Usuń</button>
+                    <button class="btn btn-secondary" id="close-grade-details">Zamknij</button>
+                </div>
+            `;
             
             modal.style.display = 'flex';
             
@@ -2292,7 +2258,6 @@ const GRADE_OPTIONS = [
             document.getElementById('grade-modal').style.display = 'none';
         }
 
-        // Material plan functions
         function loadMaterial() {
             const subject = document.getElementById('material-subject').value;
             
@@ -2360,7 +2325,7 @@ const GRADE_OPTIONS = [
             body.innerHTML = `
                 <div class="form-group">
                     <label for="material-topics">Tematy (jeden na linijkę):</label>
-                    <textarea id="material-topics" class="material-topics-input" placeholder="Wpisz tematy, każdy w nowej linii:&#10;Temat 1&#10;Temat 2&#10;Temat 3"></textarea>
+                    <textarea id="material-topics" class="material-topics-input" placeholder="Wpisz tematy, każdy w nowej linii"></textarea>
                 </div>
                 <div class="form-actions">
                     <button class="btn btn-secondary" id="cancel-material">Anuluj</button>
@@ -2431,7 +2396,6 @@ const GRADE_OPTIONS = [
             }
         }
 
-        // Event management functions
         function loadUpcomingEvents() {
             const upcomingList = document.getElementById('upcoming-events-list');
             upcomingList.innerHTML = '';
@@ -2468,7 +2432,6 @@ const GRADE_OPTIONS = [
             });
         }
 
-        // Nowe funkcje do zarządzania wydarzeniami
         function showEventForm() {
             const modal = document.getElementById('event-modal');
             const title = document.getElementById('event-modal-title');
@@ -2516,7 +2479,6 @@ const GRADE_OPTIONS = [
                 </div>
             `;
             
-            // Ustaw domyślną datę wpisania na dzisiejszą
             document.getElementById('event-entry-date').value = new Date().toISOString().split('T')[0];
             
             modal.style.display = 'flex';
@@ -2557,7 +2519,6 @@ const GRADE_OPTIONS = [
             generateWeeklyCalendar();
             loadUpcomingEvents();
             document.getElementById('event-modal').style.display = 'none';
-            alert('Wydarzenie zostało dodane');
         }
 
         function showEventDetails(eventId) {
@@ -2606,7 +2567,6 @@ const GRADE_OPTIONS = [
             });
         }
 
-        // Admin functions
         function loadAdminData() {
             loadSubjectsForAdmin();
             loadStudents();
@@ -2615,7 +2575,6 @@ const GRADE_OPTIONS = [
 
         function loadSubjectsForAdmin() {
             const subjectList = document.getElementById('subject-list');
-            
             subjectList.innerHTML = '';
             
             if (appData.subjects.length === 0) {
@@ -2628,9 +2587,7 @@ const GRADE_OPTIONS = [
                 subjectItem.className = 'class-item';
                 
                 subjectItem.innerHTML = `
-                    <div>
-                        <strong>${subject}</strong>
-                    </div>
+                    <div><strong>${subject}</strong></div>
                     <div class="item-actions">
                         <button class="btn btn-danger small-btn delete-subject" data-index="${index}">Usuń</button>
                     </div>
@@ -2649,11 +2606,10 @@ const GRADE_OPTIONS = [
 
         function loadStudents() {
             const studentList = document.getElementById('student-list');
-            
             studentList.innerHTML = '';
             
             if (appData.students.length === 0) {
-                studentList.innerHTML = '<div class="student-item">Brak uczniów w klasie</div>';
+                studentList.innerHTML = '<div class="student-item">Brak uczniów</div>';
                 return;
             }
             
@@ -2681,7 +2637,6 @@ const GRADE_OPTIONS = [
 
         function loadCategories() {
             const categoryList = document.getElementById('category-list');
-            
             categoryList.innerHTML = '';
             
             if (appData.categories.length === 0) {
@@ -2728,7 +2683,6 @@ const GRADE_OPTIONS = [
             }
             
             appData.subjects.push(name);
-            
             saveData();
             loadSubjectsForAdmin();
             loadSubjects();
@@ -2763,8 +2717,7 @@ const GRADE_OPTIONS = [
             saveData();
             loadStudents();
             document.getElementById('student-names').value = '';
-            
-            alert(`Dodano ${addedCount} uczniów do klasy`);
+            alert(`Dodano ${addedCount} uczniów`);
         }
 
         function addCategory() {
@@ -2781,11 +2734,7 @@ const GRADE_OPTIONS = [
                 return;
             }
             
-            appData.categories.push({
-                name: name,
-                color: color
-            });
-            
+            appData.categories.push({ name: name, color: color });
             saveData();
             loadCategories();
             loadSubjects();
@@ -2799,7 +2748,6 @@ const GRADE_OPTIONS = [
                 appData.subjects.splice(index, 1);
                 delete appData.grades[subject];
                 delete appData.material[subject];
-                
                 saveData();
                 loadSubjectsForAdmin();
                 loadSubjects();
@@ -2812,7 +2760,6 @@ const GRADE_OPTIONS = [
             if (confirm(`Czy na pewno chcesz usunąć ucznia ${student}?`)) {
                 appData.students.splice(index, 1);
                 
-                // Usuń oceny tego ucznia ze wszystkich przedmiotów
                 Object.keys(appData.grades).forEach(subject => {
                     delete appData.grades[subject][student];
                 });
@@ -2828,7 +2775,6 @@ const GRADE_OPTIONS = [
             if (confirm(`Czy na pewno chcesz usunąć kategorię ${category.name}?`)) {
                 appData.categories.splice(index, 1);
                 
-                // Usuń kategorię ze wszystkich ocen
                 Object.keys(appData.grades).forEach(subject => {
                     Object.keys(appData.grades[subject]).forEach(student => {
                         ['1', '2'].forEach(semester => {
@@ -2844,17 +2790,13 @@ const GRADE_OPTIONS = [
         }
 
         function loadSubjects() {
-            const subjectSelects = [
-                'material-subject', 'grade-subject', 'schedule-subject', 'event-subject', 'substitution-subject'
-            ];
+            const subjectSelects = ['material-subject', 'grade-subject', 'schedule-subject', 'event-subject', 'substitution-subject'];
             
             subjectSelects.forEach(selectId => {
                 const select = document.getElementById(selectId);
                 if (select) {
                     select.innerHTML = '<option value="">-- Wybierz przedmiot --</option>';
-                    select.innerHTML += appData.subjects.map(s => 
-                        `<option value="${s}">${s}</option>`
-                    ).join('');
+                    select.innerHTML += appData.subjects.map(s => `<option value="${s}">${s}</option>`).join('');
                 }
             });
             
@@ -2880,11 +2822,6 @@ const GRADE_OPTIONS = [
             return date.toLocaleDateString('pl-PL');
         }
 
-        function saveData() {
-            localStorage.setItem('classDiary', JSON.stringify(appData));
-        }
-
-        // Initialize the application when DOM is loaded
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
