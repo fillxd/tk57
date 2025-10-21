@@ -1717,41 +1717,52 @@
         }
 
         function saveLessonRealization(date, hour, lesson, materialKey) {
-            const status = document.getElementById('lesson-status').value;
-            const substituteFor = document.getElementById('substitute-for').value;
-            const notes = document.getElementById('lesson-notes').value;
-            const hasGrades = document.getElementById('lesson-has-grades').checked;
-            const hasQuiz = document.getElementById('lesson-has-quiz').checked;
-            
-            if (!appData.schedule.actual[date]) {
-                appData.schedule.actual[date] = {};
+    const status = document.getElementById('lesson-status').value;
+    const substituteFor = document.getElementById('substitute-for').value;
+    const notes = document.getElementById('lesson-notes').value;
+    const hasGrades = document.getElementById('lesson-has-grades').checked;
+    const hasQuiz = document.getElementById('lesson-has-quiz').checked;
+    
+    if (!appData.schedule.actual[date]) {
+        appData.schedule.actual[date] = {};
+    }
+    
+    // Tworzenie obiektu z danymi lekcji
+    const lessonData = {
+        ...lesson,
+        status: status,
+        notes: notes,
+        hasGrades: hasGrades,
+        hasQuiz: hasQuiz
+    };
+    
+    // Dodaj substituteFor tylko jeśli status to 'substitute_for' I pole jest wypełnione
+    if (status === 'substitute_for' && substituteFor) {
+        lessonData.substituteFor = substituteFor;
+    }
+    
+    // Dodaj completedDate tylko dla statusu 'completed'
+    if (status === 'completed') {
+        lessonData.completedDate = date;
+    }
+    
+    appData.schedule.actual[date][hour] = lessonData;
+    
+    const checkboxes = document.querySelectorAll('.topic-checkbox');
+    checkboxes.forEach(checkbox => {
+        const index = parseInt(checkbox.getAttribute('data-index'));
+        if (checkbox.checked && appData.material[materialKey] && appData.material[materialKey][index]) {
+            appData.material[materialKey][index].completed = true;
+            if (!appData.material[materialKey][index].date) {
+                appData.material[materialKey][index].date = date;
             }
-            
-            appData.schedule.actual[date][hour] = {
-                ...lesson,
-                status: status,
-                substituteFor: status === 'substitute_for' ? substituteFor : undefined,
-                notes: notes,
-                hasGrades: hasGrades,
-                hasQuiz: hasQuiz,
-                completedDate: status === 'completed' ? date : undefined
-            };
-            
-            const checkboxes = document.querySelectorAll('.topic-checkbox');
-            checkboxes.forEach(checkbox => {
-                const index = parseInt(checkbox.getAttribute('data-index'));
-                if (checkbox.checked && appData.material[materialKey] && appData.material[materialKey][index]) {
-                    appData.material[materialKey][index].completed = true;
-                    if (!appData.material[materialKey][index].date) {
-                        appData.material[materialKey][index].date = date;
-                    }
-                }
-            });
-            
-            saveData();
-            generateWeeklyCalendar();
-            document.getElementById('lesson-details-modal').style.display = 'none';
         }
+    });
+    
+    saveData();
+    generateWeeklyCalendar();
+    document.getElementById('lesson-details-modal').style.display = 'none';
+}
 
         function showSubstitutionForm(date, hour) {
             currentSubstitutionData = { date, hour };
@@ -1806,40 +1817,47 @@
             document.getElementById('save-substitution').addEventListener('click', saveSubstitution);
         }
 
-        function saveSubstitution() {
-            const date = currentSubstitutionData.date;
-            const hour = currentSubstitutionData.hour;
-            const subject = document.getElementById('substitution-subject').value;
-            const type = document.getElementById('substitution-type').value;
-            const substituteFor = document.getElementById('substitute-for-teacher').value;
-            const topic = document.getElementById('substitution-topic').value;
-            
-            if (!subject) {
-                alert('Proszę wybrać przedmiot');
-                return;
-            }
-            
-            if (type === 'substitute_for' && !substituteFor) {
-                alert('Proszę wpisać za kogo jest zastępstwo');
-                return;
-            }
-            
-            if (!appData.schedule.actual[date]) {
-                appData.schedule.actual[date] = {};
-            }
-            
-            appData.schedule.actual[date][hour] = {
-                subject: subject,
-                status: type,
-                substituteFor: type === 'substitute_for' ? substituteFor : undefined,
-                topic: topic || '',
-                isSubstitution: true
-            };
-            
-            saveData();
-            generateWeeklyCalendar();
-            document.getElementById('substitution-modal').style.display = 'none';
-        }
+       function saveSubstitution() {
+    const date = currentSubstitutionData.date;
+    const hour = currentSubstitutionData.hour;
+    const subject = document.getElementById('substitution-subject').value;
+    const type = document.getElementById('substitution-type').value;
+    const substituteFor = document.getElementById('substitute-for-teacher').value;
+    const topic = document.getElementById('substitution-topic').value;
+    
+    if (!subject) {
+        alert('Proszę wybrać przedmiot');
+        return;
+    }
+    
+    if (type === 'substitute_for' && !substituteFor) {
+        alert('Proszę wpisać za kogo jest zastępstwo');
+        return;
+    }
+    
+    if (!appData.schedule.actual[date]) {
+        appData.schedule.actual[date] = {};
+    }
+    
+    // Tworzenie obiektu z danymi zastępstwa
+    const substitutionData = {
+        subject: subject,
+        status: type || 'substitution',
+        topic: topic || '',
+        isSubstitution: true
+    };
+    
+    // Dodaj substituteFor tylko jeśli typ to 'substitute_for' I pole jest wypełnione
+    if (type === 'substitute_for' && substituteFor) {
+        substitutionData.substituteFor = substituteFor;
+    }
+    
+    appData.schedule.actual[date][hour] = substitutionData;
+    
+    saveData();
+    generateWeeklyCalendar();
+    document.getElementById('substitution-modal').style.display = 'none';
+}
 
         function loadGrades() {
             const subject = document.getElementById('grade-subject').value;
