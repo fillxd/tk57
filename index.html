@@ -6,25 +6,25 @@
     <title>Dziennik Klasy</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-        }
+    body {
+        background-color: #f5f5f5;
+        color: #333;
+    }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background-color: white;
-            min-height: 100vh;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    .container {
+        max-width: 1850px;  /* ZMIENIONE Z 1400px NA 1900px */
+        margin: 0 auto;
+        background-color: white;
+        min-height: 100vh;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
         header {
             background: linear-gradient(135deg, #2c3e50, #3498db);
@@ -619,14 +619,14 @@
             border-radius: 5px;
         }
 
-        .topic-list {
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
-            margin-top: 10px;
-        }
+            .topic-list {
+        max-height: 500px;  /* ZMIENIONE Z 200px NA 500px */
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px;
+        margin-top: 10px;
+    }
 
         .topic-item {
             padding: 8px;
@@ -939,13 +939,13 @@
                                 <th rowspan="2">Uczeń</th>
                                 <th colspan="20" class="semester-header">Semestr I</th>
                                 <th colspan="20" class="semester-header">Semestr II</th>
-                                <th rowspan="2">Średnia Roczna</th>
+                                <th rowspan="2">Średnia</th>
                             </tr>
                             <tr>
                                 <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
-                                <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>Śr I</th>
+                                <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>PŚR</th><th>ŚR</th><th>S1</th>
                                 <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
-                                <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>Śr II</th>
+                                <th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>PR</th><th>R</th><th>S2</th>
                             </tr>
                         </thead>
                         <tbody id="grade-table-body"></tbody>
@@ -2530,95 +2530,119 @@ checkboxes.forEach(checkbox => {
                 upcomingList.appendChild(eventCard);
             });
         }
+function showEventForm(eventId) {
+    const modal = document.getElementById('event-modal');
+    const title = document.getElementById('event-modal-title');
+    const body = document.getElementById('event-modal-body');
+    
+    const isEdit = eventId ? true : false;
+    const event = isEdit ? appData.events.find(e => e.id === eventId) : null;
+    
+    title.textContent = isEdit ? 'Edytuj Wydarzenie' : 'Dodaj Wydarzenie';
+    
+    body.innerHTML = `
+        <div class="form-group">
+            <label for="event-subject">Przedmiot:</label>
+            <select id="event-subject" required>
+                <option value="">-- Wybierz przedmiot --</option>
+                ${appData.subjects.map(s => 
+                    `<option value="${s}" ${isEdit && event && event.subject === s ? 'selected' : ''}>${s}</option>`
+                ).join('')}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="event-category">Wybór kategorii:</label>
+            <select id="event-category" required>
+                <option value="">-- Wybierz kategorię --</option>
+                ${appData.categories.map(c => 
+                    `<option value="${c.name}" ${isEdit && event && event.category === c.name ? 'selected' : ''}>${c.name}</option>`
+                ).join('')}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="event-entry-date">Data wpisania:</label>
+            <input type="date" id="event-entry-date" value="${isEdit && event ? event.entryDate : new Date().toISOString().split('T')[0]}" required>
+        </div>
+        <div class="form-group">
+            <label for="event-date">Data wydarzenia:</label>
+            <input type="date" id="event-date" value="${isEdit && event ? event.date : ''}" required>
+        </div>
+        <div class="form-group">
+            <label for="event-description">Opis:</label>
+            <textarea id="event-description" rows="3" placeholder="Opis wydarzenia">${isEdit && event && event.description ? event.description : ''}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="event-lesson">Lekcja (opcjonalnie):</label>
+            <select id="event-lesson">
+                <option value="">-- Nie przypisuj do lekcji --</option>
+                ${Array.from({length: 10}, (_, i) => i + 1).map(h => 
+                    `<option value="${h}" ${isEdit && event && event.lesson == h ? 'selected' : ''}>Lekcja ${h}</option>`
+                ).join('')}
+            </select>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-secondary" id="cancel-event">Anuluj</button>
+            <button class="btn btn-primary" id="save-event">${isEdit ? 'Zapisz' : 'Dodaj'}</button>
+        </div>
+    `;
+    
+    modal.style.display = 'flex';
+    
+    document.getElementById('cancel-event').addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+    
+    document.getElementById('save-event').addEventListener('click', () => {
+        saveEvent(eventId);
+    });
+}
 
-        function showEventForm() {
-            const modal = document.getElementById('event-modal');
-            const title = document.getElementById('event-modal-title');
-            const body = document.getElementById('event-modal-body');
-            
-            title.textContent = 'Dodaj Wydarzenie';
-            
-            body.innerHTML = `
-                <div class="form-group">
-                    <label for="event-subject">Przedmiot:</label>
-                    <select id="event-subject" required>
-                        <option value="">-- Wybierz przedmiot --</option>
-                        ${appData.subjects.map(s => `<option value="${s}">${s}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="event-category">Wybór kategorii:</label>
-                    <select id="event-category" required>
-                        <option value="">-- Wybierz kategorię --</option>
-                        ${appData.categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="event-entry-date">Data wpisania:</label>
-                    <input type="date" id="event-entry-date" required>
-                </div>
-                <div class="form-group">
-                    <label for="event-date">Data wydarzenia:</label>
-                    <input type="date" id="event-date" required>
-                </div>
-                <div class="form-group">
-                    <label for="event-description">Opis:</label>
-                    <textarea id="event-description" rows="3" placeholder="Opis wydarzenia"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="event-lesson">Lekcja (opcjonalnie):</label>
-                    <select id="event-lesson">
-                        <option value="">-- Nie przypisuj do lekcji --</option>
-                        ${Array.from({length: 10}, (_, i) => i + 1).map(h => `<option value="${h}">Lekcja ${h}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <button class="btn btn-secondary" id="cancel-event">Anuluj</button>
-                    <button class="btn btn-primary" id="save-event">Dodaj</button>
-                </div>
-            `;
-            
-            document.getElementById('event-entry-date').value = new Date().toISOString().split('T')[0];
-            
-            modal.style.display = 'flex';
-            
-            document.getElementById('cancel-event').addEventListener('click', () => {
-                modal.style.display = 'none';
-            });
-            
-            document.getElementById('save-event').addEventListener('click', saveEvent);
-        }
 
-        function saveEvent() {
-            const subject = document.getElementById('event-subject').value;
-            const category = document.getElementById('event-category').value;
-            const entryDate = document.getElementById('event-entry-date').value;
-            const eventDate = document.getElementById('event-date').value;
-            const description = document.getElementById('event-description').value;
-            const lesson = document.getElementById('event-lesson').value;
-            
-            if (!subject || !category || !eventDate) {
-                alert('Proszę wypełnić wymagane pola');
-                return;
-            }
-            
-            const newEvent = {
-                id: Date.now().toString(),
-                subject: subject,
-                category: category,
-                entryDate: entryDate,
-                date: eventDate,
-                description: description,
-                lesson: lesson || null,
-                title: `${subject} - ${category}`
+      function saveEvent(eventId = null) {
+    const subject = document.getElementById('event-subject').value;
+    const category = document.getElementById('event-category').value;
+    const entryDate = document.getElementById('event-entry-date').value;
+    const eventDate = document.getElementById('event-date').value;
+    const description = document.getElementById('event-description').value;
+    const lesson = document.getElementById('event-lesson').value;
+    
+    if (!subject || !category || !eventDate) {
+        alert('Proszę wypełnić wymagane pola');
+        return;
+    }
+    
+    const eventData = {
+        subject: subject,
+        category: category,
+        entryDate: entryDate,
+        date: eventDate,
+        description: description,
+        lesson: lesson || null,
+        title: `${subject} - ${category}`
+    };
+    
+    if (eventId && eventId !== null) {
+        // Edycja istniejącego wydarzenia
+        const index = appData.events.findIndex(e => e.id === eventId);
+        if (index !== -1) {
+            appData.events[index] = {
+                ...eventData,
+                id: eventId
             };
-            
-            appData.events.push(newEvent);
-            saveData();
-            generateWeeklyCalendar();
-            loadUpcomingEvents();
-            document.getElementById('event-modal').style.display = 'none';
         }
+    } else {
+        // Dodawanie nowego wydarzenia
+        appData.events.push({
+            ...eventData,
+            id: Date.now().toString()
+        });
+    }
+    
+    saveData();
+    generateWeeklyCalendar();
+    loadUpcomingEvents();
+    document.getElementById('event-modal').style.display = 'none';
+}
 
         function showEventDetails(eventId) {
             const event = appData.events.find(e => e.id === eventId);
@@ -2634,27 +2658,31 @@ checkboxes.forEach(checkbox => {
             const color = categoryObj ? categoryObj.color : '#3498db';
             
             body.innerHTML = `
-                <div class="grade-details">
-                    <p><strong>Tytuł:</strong> ${event.title}</p>
-                    <p><strong>Przedmiot:</strong> ${event.subject}</p>
-                    <p><strong>Kategoria:</strong> <span style="color: ${color}">${event.category}</span></p>
-                    <p><strong>Data wpisania:</strong> ${formatDisplayDate(event.entryDate)}</p>
-                    <p><strong>Data wydarzenia:</strong> ${formatDisplayDate(event.date)}</p>
-                    ${event.lesson ? `<p><strong>Lekcja:</strong> ${event.lesson}</p>` : ''}
-                    <p><strong>Opis:</strong> ${event.description || 'Brak opisu'}</p>
-                </div>
-                <div class="form-actions">
-                    <button class="btn btn-danger" id="delete-event">Usuń</button>
-                    <button class="btn btn-secondary" id="close-event-details">Zamknij</button>
-                </div>
-            `;
+    <div class="grade-details">
+        <p><strong>Tytuł:</strong> ${event.title}</p>
+        <p><strong>Przedmiot:</strong> ${event.subject}</p>
+        <p><strong>Kategoria:</strong> <span style="color: ${color}">${event.category}</span></p>
+        <p><strong>Data wpisania:</strong> ${formatDisplayDate(event.entryDate)}</p>
+        <p><strong>Data wydarzenia:</strong> ${formatDisplayDate(event.date)}</p>
+        ${event.lesson ? `<p><strong>Lekcja:</strong> ${event.lesson}</p>` : ''}
+        <p><strong>Opis:</strong> ${event.description || 'Brak opisu'}</p>
+    </div>
+    <div class="form-actions">
+        <button class="btn btn-primary" id="edit-event">Edytuj</button>
+        <button class="btn btn-danger" id="delete-event">Usuń</button>
+        <button class="btn btn-secondary" id="close-event-details">Zamknij</button>
+    </div>
+`;
             
             modal.style.display = 'flex';
             
             document.getElementById('close-event-details').addEventListener('click', () => {
                 modal.style.display = 'none';
             });
-            
+            document.getElementById('edit-event').addEventListener('click', () => {
+    modal.style.display = 'none';
+    showEventForm(eventId);
+});
             document.getElementById('delete-event').addEventListener('click', () => {
                 if (confirm('Czy na pewno chcesz usunąć to wydarzenie?')) {
                     appData.events = appData.events.filter(e => e.id !== eventId);
