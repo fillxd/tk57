@@ -1954,15 +1954,26 @@ checkboxes.forEach(checkbox => {
             const subjectGrades = appData.grades[subject] || {};
             
             students.forEach(student => {
-                const row = document.createElement('tr');
-                
-                const nameCell = document.createElement('td');
-                nameCell.className = 'student-name';
-                nameCell.textContent = student;
-                row.appendChild(nameCell);
-                
-                const sem1Grades = subjectGrades[student]?.['1'] || [];
-                const filteredSem1Grades = category === 'all' ? sem1Grades : sem1Grades.filter(g => g && g.category === category);
+    const row = document.createElement('tr');
+    
+    const nameCell = document.createElement('td');
+    nameCell.className = 'student-name';
+    nameCell.textContent = student;
+    row.appendChild(nameCell);
+    
+    // POPRAWKA - konwertuj obiekt na tablicę jeśli trzeba
+    let sem1Grades = subjectGrades[student]?.['1'] || [];
+    
+    // Jeśli to obiekt zamiast tablicy, konwertuj na tablicę
+    if (!Array.isArray(sem1Grades)) {
+        const gradesArray = new Array(20).fill(null);
+        Object.keys(sem1Grades).forEach(key => {
+            gradesArray[parseInt(key)] = sem1Grades[key];
+        });
+        sem1Grades = gradesArray;
+    }
+    
+    const filteredSem1Grades = category === 'all' ? sem1Grades : sem1Grades.filter(g => g && g.category === category);
                 
                 for (let i = 0; i < 19; i++) {
                     const gradeCell = document.createElement('td');
@@ -1987,12 +1998,23 @@ checkboxes.forEach(checkbox => {
                 }
                 
                 const avg1Cell = document.createElement('td');
-                avg1Cell.className = 'average-cell';
-                avg1Cell.textContent = calculateAverage(filteredSem1Grades);
-                row.appendChild(avg1Cell);
-                
-                const sem2Grades = subjectGrades[student]?.['2'] || [];
-                const filteredSem2Grades = category === 'all' ? sem2Grades : sem2Grades.filter(g => g && g.category === category);
+avg1Cell.className = 'average-cell';
+avg1Cell.textContent = calculateAverage(filteredSem1Grades);
+row.appendChild(avg1Cell);
+
+// ✅ DODAJ KONWERSJĘ DLA SEMESTRU 2:
+let sem2Grades = subjectGrades[student]?.['2'] || [];
+
+// Jeśli to obiekt zamiast tablicy, konwertuj na tablicę
+if (!Array.isArray(sem2Grades)) {
+    const gradesArray = new Array(20).fill(null);
+    Object.keys(sem2Grades).forEach(key => {
+        gradesArray[parseInt(key)] = sem2Grades[key];
+    });
+    sem2Grades = gradesArray;
+}
+
+const filteredSem2Grades = category === 'all' ? sem2Grades : sem2Grades.filter(g => g && g.category === category);
                 
                 for (let i = 0; i < 19; i++) {
                     const gradeCell = document.createElement('td');
@@ -2032,15 +2054,24 @@ checkboxes.forEach(checkbox => {
         }
 
         function calculateAverage(grades) {
-            const validGrades = grades.filter(g => g && g.grade && GRADE_VALUES[g.grade] !== null);
-            if (validGrades.length === 0) return '-';
-            
-            const sum = validGrades.reduce((total, grade) => {
-                return total + GRADE_VALUES[grade.grade];
-            }, 0);
-            
-            return (sum / validGrades.length).toFixed(2);
-        }
+    // Konwersja na tablicę jeśli to obiekt
+    if (!Array.isArray(grades)) {
+        const gradesArray = [];
+        Object.keys(grades || {}).forEach(key => {
+            if (grades[key]) gradesArray.push(grades[key]);
+        });
+        grades = gradesArray;
+    }
+    
+    const validGrades = grades.filter(g => g && g.grade && GRADE_VALUES[g.grade] !== null);
+    if (validGrades.length === 0) return '-';
+    
+    const sum = validGrades.reduce((total, grade) => {
+        return total + GRADE_VALUES[grade.grade];
+    }, 0);
+    
+    return (sum / validGrades.length).toFixed(2);
+}
 
         function showGradeDetails(student, subject, semester, index) {
             const grade = appData.grades[subject]?.[student]?.[semester]?.[index];
