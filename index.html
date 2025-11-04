@@ -1219,15 +1219,22 @@
         }
 
         async function saveData() {
-            try {
-                await dbRef.set(appData);
-                console.log('✅ Zapisano');
-                showNotification('Zapisano!');
-            } catch (error) {
-                console.error('❌ Błąd zapisu:', error);
-                alert('Błąd zapisu: ' + error.message);
-            }
-        }
+    try {
+        console.log('💾 Próbuję zapisać dane...');
+        console.log('📦 Dane do zapisu:', appData);
+        console.log('📅 Liczba wydarzeń:', appData.events.length);
+        
+        await dbRef.set(appData);
+        
+        console.log('✅ Zapisano do Firebase!');
+        showNotification('Zapisano!');
+    } catch (error) {
+        console.error('❌ Błąd zapisu:', error);
+        console.error('Szczegóły:', error.message);
+        console.error('Kod błędu:', error.code);
+        alert('Błąd zapisu: ' + error.message);
+    }
+}
 
         function showNotification(message) {
             const notification = document.createElement('div');
@@ -1322,7 +1329,7 @@
             document.getElementById('add-material').addEventListener('click', showMaterialForm);
             document.getElementById('add-grade-bulk').addEventListener('click', showBulkGradeForm);
             document.getElementById('add-grade-single').addEventListener('click', showSingleGradeForm);
-            document.getElementById('add-event-btn').addEventListener('click', showEventForm);
+            document.getElementById('add-event-btn').addEventListener('click', () => showEventForm());
 
             document.getElementById('material-subject').addEventListener('change', loadMaterial);
             document.getElementById('grade-subject').addEventListener('change', loadGrades);
@@ -2629,7 +2636,15 @@ function showEventForm(eventId) {
 }
 
 
-      function saveEvent(eventId = null) {
+     function saveEvent(eventId = null) {
+    console.log('🎯 START saveEvent()');
+    
+    // Zabezpieczenie - jeśli eventId to Event, ustaw na null
+    if (eventId && eventId instanceof Event) {
+        console.log('⚠️ eventId to Ev 	ent, ustawiam na null');
+        eventId = null;
+    }
+    
     const subject = document.getElementById('event-subject').value;
     const category = document.getElementById('event-category').value;
     const entryDate = document.getElementById('event-entry-date').value;
@@ -2637,10 +2652,17 @@ function showEventForm(eventId) {
     const description = document.getElementById('event-description').value;
     const lesson = document.getElementById('event-lesson').value;
     
+    console.log('📝 Wartości z formularza:', {
+        subject, category, entryDate, eventDate, description, lesson
+    });
+    
     if (!subject || !category || !eventDate) {
+        console.log('❌ Walidacja nie przeszła!');
         alert('Proszę wypełnić wymagane pola');
         return;
     }
+    
+    console.log('✅ Walidacja OK');
     
     const eventData = {
         subject: subject,
@@ -2652,27 +2674,42 @@ function showEventForm(eventId) {
         title: `${subject} - ${category}`
     };
     
+    console.log('📦 Utworzono eventData:', eventData);
+    
     if (eventId && eventId !== null) {
-        // Edycja istniejącego wydarzenia
+        console.log('📝 Tryb EDYCJI, eventId:', eventId);
         const index = appData.events.findIndex(e => e.id === eventId);
         if (index !== -1) {
             appData.events[index] = {
                 ...eventData,
                 id: eventId
             };
+            console.log('✅ Zaktualizowano wydarzenie na pozycji', index);
         }
     } else {
-        // Dodawanie nowego wydarzenia
-        appData.events.push({
+        console.log('➕ Tryb DODAWANIA');
+        const newEvent = {
             ...eventData,
             id: Date.now().toString()
-        });
+        };
+        console.log('📦 Nowe wydarzenie:', newEvent);
+        
+        appData.events.push(newEvent);
+        console.log('✅ Dodano do appData.events');
+        console.log('📊 Teraz jest wydarzeń:', appData.events.length);
     }
     
+    console.log('💾 Wywołuję saveData()...');
     saveData();
+    
+    console.log('🔄 Odświeżam kalendarz...');
     generateWeeklyCalendar();
     loadUpcomingEvents();
+    
+    console.log('❌ Zamykam modal...');
     document.getElementById('event-modal').style.display = 'none';
+    
+    console.log('🎯 KONIEC saveEvent()');
 }
 
         function showEventDetails(eventId) {
